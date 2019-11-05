@@ -1,0 +1,17 @@
+{
+  "name": "xyz_search",
+  "version": "1.0.0",
+  "description": "",
+  "main": "generateCatGeoJSON.js",
+  "dependencies": {
+    "dotenv": "^8.2.0",
+    "node-fetch": "^2.6.0"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC"
+}
