@@ -32,8 +32,29 @@ let root = {
 	]
 };
 
+// used for my testing of nested props
+const weapons = ["katanas","broadswords","shortswords","pole axes"];
+const cooking = ["cookies","pies","cakes","roasts"];
+
 for(let i=0;i<NUM_CATS;i++) {
 	let cat = makeCat();
+
+	/*
+	added so that I could test array props
+	*/
+	cat.friends = [];
+	let totalFriends = getRandomInt(0,3);
+	for(let i=0;i<totalFriends;i++) {
+		cat.friends.push(randomName());
+	}
+
+	/*
+	Added so I can test nested props
+	*/
+	cat.skills = {
+		weapons:weapons[getRandomInt(0, weapons.length-1)],
+		cooking:cooking[getRandomInt(0, cooking.length - 1)]
+	};
 
 	let city = cities[getRandomInt(0, cities.length - 1)];
 

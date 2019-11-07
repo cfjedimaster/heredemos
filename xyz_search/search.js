@@ -5,7 +5,9 @@ require('dotenv').config();
 const fetch = require('node-fetch');
 const ACCESS_TOKEN = process.env.ACCESS_TOKEN;
 
-const SPACE_ID = process.env.SPACE_ID;
+//const SPACE_ID = process.env.SPACE_ID;
+//const SPACE_ID = process.env.SPACE_ID_ARRAY;
+const SPACE_ID = process.env.SPACE_ID_NESTED;
 
 // Example of a specific breed search
 fetch(`https://xyz.api.here.com/hub/spaces/${SPACE_ID}/search?access_token=${ACCESS_TOKEN}&p.breed=ragdoll`)
@@ -76,3 +78,31 @@ fetch(`https://xyz.api.here.com/hub/spaces/${SPACE_ID}/search?access_token=${ACC
 .catch(e => {
 	console.error(e);
 });
+
+// Try to do array
+fetch(`https://xyz.api.here.com/hub/spaces/${SPACE_ID}/search?access_token=${ACCESS_TOKEN}&p.friends=Silly`)
+.then(res => {
+	return res.json();
+})
+.then(res => {
+	// show one sample
+	if (res.features.length >= 1) console.log(JSON.stringify(res.features[0].properties, null, '\t'));
+	console.log(res.features.length + ' results (array test).\n\n');
+})
+.catch(e => {
+	console.error(e);
+});
+
+// Try to do nested
+fetch(`https://xyz.api.here.com/hub/spaces/${SPACE_ID}/search?access_token=${ACCESS_TOKEN}&p.skills.cooking=cakes`)
+	.then(res => {
+		return res.json();
+	})
+	.then(res => {
+		// show one sample
+		if (res.features.length >= 1) console.log(JSON.stringify(res.features[0].properties, null, '\t'));
+		console.log(res.features.length + ' results (cakes test).\n\n');
+	})
+	.catch(e => {
+		console.error(e);
+	});
