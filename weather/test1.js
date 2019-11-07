@@ -6,7 +6,6 @@ const HERE_APP_CODE = process.env.HERE_APP_CODE;
 const fetch = require('node-fetch');
 
 // test observation
-/*
 fetch(`https://weather.api.here.com/weather/1.0/report.json?app_id=${HERE_APP_ID}&app_code=${HERE_APP_CODE}&product=observation&name=Lafayette,LA&metric=false`)
 .then(res => res.json())
 .then(res => {
@@ -29,4 +28,36 @@ fetch(`https://weather.api.here.com/weather/1.0/report.json?app_id=${HERE_APP_ID
 	console.log('Forcast (7 Days Simple):', res.dailyForecasts.forecastLocation);
 	console.log('---------------------------------------');
 });
-*/
+
+// test forecast_hourly
+fetch(`https://weather.api.here.com/weather/1.0/report.json?app_id=${HERE_APP_ID}&app_code=${HERE_APP_CODE}&product=forecast_hourly&name=Lafayette,LA&metric=false`)
+.then(res => res.json())
+.then(res => {
+	console.log('Forcast (Hourly):', res.hourlyForecasts.forecastLocation);
+	console.log('---------------------------------------');
+});
+
+// test forecast_astronomy
+fetch(`https://weather.api.here.com/weather/1.0/report.json?app_id=${HERE_APP_ID}&app_code=${HERE_APP_CODE}&product=forecast_astronomy&name=Lafayette,LA&metric=false`)
+.then(res => res.json())
+.then(res => {
+	console.log('Forcast (Astronomy):', res.astronomy.astronomy);
+	console.log('---------------------------------------');
+});
+
+
+// test alerts
+fetch(`https://weather.api.here.com/weather/1.0/report.json?app_id=${HERE_APP_ID}&app_code=${HERE_APP_CODE}&product=alerts&name=Lafayette,LA&metric=false`)
+.then(res => res.json())
+.then(res => {
+	console.log('Alerts:', res.alerts);
+	console.log('---------------------------------------');
+});
+
+// test new alerts
+fetch(`https://weather.api.here.com/weather/1.0/report.json?app_id=${HERE_APP_ID}&app_code=${HERE_APP_CODE}&product=nws_alerts&name=Lafayette,LA&metric=false`)
+.then(res => res.json())
+.then(res => {
+	console.log('NWS Alerts:', res.nwsAlerts);
+	console.log('---------------------------------------');
+});
