@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title></title>
+		<meta name="description" content="">
+		<meta name="viewport" content="width=device-width">
+		<script src="https://xyz.api.here.com/maps/latest/xyz-maps-common.min.js" type="text/javascript"
+	charset="UTF-8"></script>
+		<script src="https://xyz.api.here.com/maps/latest/xyz-maps-core.min.js" type="text/javascript" charset="UTF-8"></script>
+		<script src="https://xyz.api.here.com/maps/latest/xyz-maps-display.min.js" type="text/javascript"
+	charset="UTF-8"></script>
+
+	</head>
+	<body>
+
+	<div style="width: 960px; height: 540px" id="map"></div>
+	
+	<p>
+		Breed: 
+		<select id="breed">
+			<option></option>
+			<option value='persian'>Persian</option>
+			<option value='bengal'>Bengal</option>
+			<option value='siamese'>Siamese</option>
+			<option value='maine coon'>Maine Coon</option>
+			<option value='sphynx'>Sphynx</option>
+			<option value='ragdoll'>Ragdoll</option>
+			<option value='birman'>Birman</option>
+			<option value='chartreux'>Chartreux</option>
+			<option value='toyger'>Toyger</option>
+			<option value='devon rex'>Devon Rex</option>
+		</select>
+	</p>
+
+	<script type="application/javascript">
+		//specify your credentials to spaces
+		var YOUR_ACCESS_TOKEN = "YOUR TOKEN"; 
+
+		// configure layers
+		var layers = [
+			new here.xyz.maps.layers.TileLayer({
+				name: 'Image Layer',
+				min: 3,
+				max: 10,
+				provider: new here.xyz.maps.providers.ImageProvider({
+					name: 'Live Map',
+					url: 'https://1.mapcreator.tilehub.api.here.com/tilehub/wv_livemap_bc/png/sat/256/{QUADKEY}?access_token=' + YOUR_ACCESS_TOKEN
+				})
+			})
+		]
+
+		var mySpaceProvider = new here.xyz.maps.providers.SpaceProvider({
+			// Name of the provider
+			name: 'SpaceProvider',
+
+			// Zoom level at which tiles are cached
+			level: 3,
+
+			// Space ID
+			space: 'TjJw79XK',
+
+			// User credential of the provider
+			credentials: {
+				access_token: YOUR_ACCESS_TOKEN
+			}
+		});
+
+		var myLayer = new here.xyz.maps.layers.TileLayer({
+			// Name of the layer
+			name: 'mySpaceLayer',
+
+			// Minimum zoom level
+			min: 3,
+
+			// Maximum zoom level
+			max: 10,
+
+			// Define provider for this layer
+			provider: mySpaceProvider
+		})
+
+		window.display = new here.xyz.maps.Map(document.getElementById("map"), {
+			zoomLevel: 4,
+			center: {
+				longitude: -96, latitude: 37.73
+			},
+			// add layers to display
+			layers: layers
+		});
+
+		display.addLayer(myLayer);
+
+		let breedSelect = document.querySelector('#breed');
+		breedSelect.addEventListener('change', (e) => {
+			let currentVal = breedSelect.querySelector('option:checked').value;
+			console.log(currentVal);
+			if(currentVal === '') mySpaceProvider.setPropertySearch(null);
+			else mySpaceProvider.setPropertySearch('breed', '=', currentVal);
+		}, false);
+
+	</script>
+
+	</body>
+</html>
