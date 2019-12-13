@@ -26,8 +26,11 @@ Note it's using 15 minutes, not 5. ;)
 	<body>
 
 		<div id="map"></div>
+		<div id="msg"></div>
 
 		<script>
+		let msg = document.querySelector('#msg');
+
 		// Where is our office?
 		let startPosition = '42.48408,-71.19154';
 
@@ -42,7 +45,7 @@ Note it's using 15 minutes, not 5. ;)
 		const map = new H.Map(document.getElementById('map'),
 			defaultLayers.vector.normal.map, {
 				center: {lat: 42.48408, lng: -71.19154 },
-				zoom: 15
+				zoom: 11
 		});
 
 		const behavior = new H.mapevents.Behavior(new H.mapevents.MapEvents(map));
@@ -60,41 +63,70 @@ Note it's using 15 minutes, not 5. ;)
 		});
 
 		function startIsolineRouting() {
-			// Set up the Routing API parameters
-			var routingParams = {
-				'mode': 'fastest;car;traffic:enabled', // traffic matters for our commute
-				'start': startPosition,    
-				'departure': '2019-07-16T17:00:00', // let's leave the office at 5pm
-				'rangetype': 'time', // how far can get in 30 minutes?
-				'range': '900' // 15 minutes    
-			};
+			console.log('doing my shit');
+			let dateStr = '2019-07-16T';
+			let isos = [];
 
-			// Call the Routing API to calculate an isoline
-			router.calculateIsoline(routingParams, onResult, error => { alert(error.message); });
-		}
+			for(var i=0;i<=23;i++) {
 
-		var onResult = function(result) {
-			var center = new H.geo.Point(result.response.center.latitude, result.response.center.longitude),
-				isolineCoords = result.response.isoline[0].component[0].shape,
-				linestring = new H.geo.LineString(),
-				isolinePolygon,
-				isolineCenter;
+				let departure = dateStr + (i<10?'0'+i:i) + ':00:00';
 
-			// Add the returned isoline coordinates to a linestring
-			isolineCoords.forEach(function(coords) {
-				linestring.pushLatLngAlt.apply(linestring, coords.split(','));
+				// Set up the Routing API parameters
+				var routingParams = {
+					'mode': 'fastest;car;traffic:enabled', // traffic matters for our commute
+					'start': startPosition,    
+					'departure': departure,
+					'rangetype': 'time', 
+					'range': '900'     
+				};
+
+				isos.push(new Promise((resolve, reject) => {
+					router.calculateIsoline(routingParams, result => {
+						resolve(result);	
+					}, error => { alert(error.message); });
+				}));
+
+			}
+
+			Promise.all(isos)
+			.then(res => {
+				console.log('ive done 24 calls like a boss', res);
+				res.forEach((result,idx) => {
+					var center = new H.geo.Point(result.response.center.latitude, result.response.center.longitude),
+						isolineCoords = result.response.isoline[0].component[0].shape,
+						linestring = new H.geo.LineString(),
+						isolinePolygon,
+						isolineCenter;
+
+					// Add the returned isoline coordinates to a linestring
+					isolineCoords.forEach(function(coords) {
+						linestring.pushLatLngAlt.apply(linestring, coords.split(','));
+					});
+
+					isolinePolygon = new H.map.Polygon(linestring, {data:{index:idx}});
+					isolinePolygon.setVisibility(false);
+
+					// Add the polygon and marker to the map
+					map.addObjects([isolinePolygon]);
+					console.log('Added object');
+				});
+				console.log('done and ready');
+				doAnimation(0);
 			});
 
-			// Create a polygon and a marker representing the isoline
-			isolinePolygon = new H.map.Polygon(linestring);
-			isolineCenter = new H.map.Marker(center);
-console.log(isolinePolygon);
-			// Add the polygon and marker to the map
-			map.addObjects([isolineCenter, isolinePolygon]);
+		}
 
-			// Center and zoom the map so that the whole isoline polygon is in the viewport:
-			map.getViewModel().setLookAtData({ bounds: isolinePolygon.getBoundingBox()});
-		};
+		function doAnimation(hour) {
+			console.log('doAnimation('+hour+')');
+			let obs = map.getObjects();
+			if(hour > 0) {
+				obs[hour-1].setVisibility(false);
+			}
+			msg.innerHTML = '<b>Distance you can travel in 15 minutes at time ' + (hour<10?'0'+hour:hour+':00');
+			obs[hour].setVisibility(true);
+			if(hour < 23) window.setTimeout(doAnimation, 800, hour+1);
+
+		}
 		</script>
 
 	</body>
