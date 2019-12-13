@@ -1,0 +1,1 @@
+Guide showing how to route in JS and app to map, https://developer.here.com/documentation/maps/dev_guide/topics/routing.html

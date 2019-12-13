@@ -1,0 +1,101 @@
+<!--
+Credit for this:
+	https://developer.here.com/blog/finding-my-dream-home-with-isoline-routing
+
+Note it's using 15 minutes, not 5. ;)
+-->
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title></title>
+		<meta name="description" content="">
+		<meta name="viewport" content="width=device-width">
+		<style>
+			#map {
+				width: 700px;
+				height: 700px;
+			}
+		</style>
+		<script src="https://js.api.here.com/v3/3.1/mapsjs-core.js" type="text/javascript" charset="utf-8"></script>
+		<script src="https://js.api.here.com/v3/3.1/mapsjs-service.js" type="text/javascript" charset="utf-8"></script>
+		<script src="https://js.api.here.com/v3/3.1/mapsjs-mapevents.js" type="text/javascript" charset="utf-8"></script>
+		<script src="https://js.api.here.com/v3/3.1/mapsjs-ui.js" type="text/javascript" charset="utf-8"></script>
+        <link rel="stylesheet" type="text/css" href="https://js.api.here.com/v3/3.1/mapsjs-ui.css" />
+	</head>
+	<body>
+
+		<div id="map"></div>
+
+		<script>
+		// Where is our office?
+		let startPosition = '42.48408,-71.19154';
+
+		// Setting up the map platform
+		const platform = new H.service.Platform({
+			apikey: 'c1LJuR0Bl2y02PefaQ2d8PvPnBKEN8KdhAOFYR_Bgmw'
+		});
+
+		// Setting up the map (with default layers, behaviour and UI)
+		const defaultLayers = platform.createDefaultLayers();
+
+		const map = new H.Map(document.getElementById('map'),
+			defaultLayers.vector.normal.map, {
+				center: {lat: 42.48408, lng: -71.19154 },
+				zoom: 15
+		});
+
+		const behavior = new H.mapevents.Behavior(new H.mapevents.MapEvents(map));
+
+		const ui = H.ui.UI.createDefault(map, defaultLayers);
+
+		// Get an instance of the routing service
+		var router = platform.getRoutingService();
+
+		// Set a new starting position (office) when the user clicks the map
+		map.addEventListener('tap', function (evt) {    
+			var coord = map.screenToGeo(evt.currentPointer.viewportX, evt.currentPointer.viewportY);  
+			startPosition = coord.lat + ',' + coord.lng;
+			startIsolineRouting();
+		});
+
+		function startIsolineRouting() {
+			// Set up the Routing API parameters
+			var routingParams = {
+				'mode': 'fastest;car;traffic:enabled', // traffic matters for our commute
+				'start': startPosition,    
+				'departure': '2019-07-16T17:00:00', // let's leave the office at 5pm
+				'rangetype': 'time', // how far can get in 30 minutes?
+				'range': '900' // 15 minutes    
+			};
+
+			// Call the Routing API to calculate an isoline
+			router.calculateIsoline(routingParams, onResult, error => { alert(error.message); });
+		}
+
+		var onResult = function(result) {
+			var center = new H.geo.Point(result.response.center.latitude, result.response.center.longitude),
+				isolineCoords = result.response.isoline[0].component[0].shape,
+				linestring = new H.geo.LineString(),
+				isolinePolygon,
+				isolineCenter;
+
+			// Add the returned isoline coordinates to a linestring
+			isolineCoords.forEach(function(coords) {
+				linestring.pushLatLngAlt.apply(linestring, coords.split(','));
+			});
+
+			// Create a polygon and a marker representing the isoline
+			isolinePolygon = new H.map.Polygon(linestring);
+			isolineCenter = new H.map.Marker(center);
+
+			// Add the polygon and marker to the map
+			map.addObjects([isolineCenter, isolinePolygon]);
+
+			// Center and zoom the map so that the whole isoline polygon is in the viewport:
+			map.getViewModel().setLookAtData({ bounds: isolinePolygon.getBoundingBox()});
+		};
+		</script>
+
+	</body>
+</html>

@@ -1,0 +1,447 @@
+{
+	"waypoint": [
+		{
+			"linkId": "-21849045",
+			"mappedPosition": {
+				"latitude": 40.7118678,
+				"longitude": -74.0592526
+			},
+			"originalPosition": {
+				"latitude": 40.712,
+				"longitude": -74.0594131
+			},
+			"type": "stopOver",
+			"spot": 0.7285714,
+			"sideOfStreet": "right",
+			"mappedRoadName": "Pine St",
+			"label": "Pine St",
+			"shapeIndex": 0,
+			"source": "user"
+		},
+		{
+			"linkId": "+1211394744",
+			"mappedPosition": {
+				"latitude": 42.3597904,
+				"longitude": -71.059774
+			},
+			"originalPosition": {
+				"latitude": 42.36,
+				"longitude": -71.0588801
+			},
+			"type": "stopOver",
+			"spot": 0.248,
+			"sideOfStreet": "right",
+			"mappedRoadName": "Cambridge St",
+			"label": "Cambridge St",
+			"shapeIndex": 2569,
+			"source": "user"
+		}
+	],
+	"mode": {
+		"type": "fastest",
+		"transportModes": [
+			"car"
+		],
+		"trafficMode": "disabled",
+		"feature": []
+	},
+	"leg": [
+		{
+			"start": {
+				"linkId": "-21849045",
+				"mappedPosition": {
+					"latitude": 40.7118678,
+					"longitude": -74.0592526
+				},
+				"originalPosition": {
+					"latitude": 40.712,
+					"longitude": -74.0594131
+				},
+				"type": "stopOver",
+				"spot": 0.7285714,
+				"sideOfStreet": "right",
+				"mappedRoadName": "Pine St",
+				"label": "Pine St",
+				"shapeIndex": 0,
+				"source": "user"
+			},
+			"end": {
+				"linkId": "+1211394744",
+				"mappedPosition": {
+					"latitude": 42.3597904,
+					"longitude": -71.059774
+				},
+				"originalPosition": {
+					"latitude": 42.36,
+					"longitude": -71.0588801
+				},
+				"type": "stopOver",
+				"spot": 0.248,
+				"sideOfStreet": "right",
+				"mappedRoadName": "Cambridge St",
+				"label": "Cambridge St",
+				"shapeIndex": 2569,
+				"source": "user"
+			},
+			"length": 353446,
+			"travelTime": 15449,
+			"maneuver": [
+				{
+					"position": {
+						"latitude": 40.7118678,
+						"longitude": -74.0592526
+					},
+					"instruction": "Head toward <span class=\"toward_street\">Lafayette St</span> on <span class=\"street\">Pine St</span>. <span class=\"distance-description\">Go for <span class=\"length\">241 m</span>.</span>",
+					"travelTime": 44,
+					"length": 241,
+					"id": "M1",
+					"_type": "PrivateTransportManeuverType"
+				},
+				{
+					"position": {
+						"latitude": 40.7103968,
+						"longitude": -74.0613377
+					},
+					"instruction": "Turn <span class=\"direction\">right</span> onto <span class=\"next-street\">Communipaw Ave</span>. <span class=\"distance-description\">Go for <span class=\"length\">164 m</span>.</span>",
+					"travelTime": 22,
+					"length": 164,
+					"id": "M2",
+					"_type": "PrivateTransportManeuverType"
+				},
+				{
+					"position": {
+						"latitude": 40.7114697,
+						"longitude": -74.0626681
+					},
+					"instruction": "Turn <span class=\"direction\">right</span> onto <span class=\"next-street\">Pacific Ave</span>. <span class=\"distance-description\">Go for <span class=\"length\">930 m</span>.</span>",
+					"travelTime": 101,
+					"length": 930,
+					"id": "M3",
+					"_type": "PrivateTransportManeuverType"
+				},
+				{
+					"position": {
+						"latitude": 40.7171881,
+						"longitude": -74.0546107
+					},
+					"instruction": "Turn <span class=\"direction\">right</span> onto <span class=\"next-street\">Grand St</span>. <span class=\"distance-description\">Go for <span class=\"length\">487 m</span>.</span>",
+					"travelTime": 66,
+					"length": 487,
+					"id": "M4",
+					"_type": "PrivateTransportManeuverType"
+				},
+				{
+					"position": {
+						"latitude": 40.7165551,
+						"longitude": -74.048903
+					},
+					"instruction": "Turn <span class=\"direction\">left</span> onto <span class=\"next-street\">Jersey Ave</span>. <span class=\"distance-description\">Go for <span class=\"length\">1.0 km</span>.</span>",
+					"travelTime": 138,
+					"length": 1047,
+					"id": "M5",
+					"_type": "PrivateTransportManeuverType"
+				},
+				{
+					"position": {
+						"latitude": 40.7255244,
+						"longitude": -74.0454376
+					},
+					"instruction": "Turn <span class=\"direction\">right</span> onto <span class=\"next-street\">6th St</span>. <span class=\"distance-description\">Go for <span class=\"length\">429 m</span>.</span>",
+					"travelTime": 57,
+					"length": 429,
+					"id": "M6",
+					"_type": "PrivateTransportManeuverType"
+				},
+				{
+					"position": {
+						"latitude": 40.7250524,
+						"longitude": -74.0404058
+					},
+					"instruction": "Turn <span class=\"direction\">left</span> onto <span class=\"next-street\">Marin Blvd</span>. <span class=\"distance-description\">Go for <span class=\"length\">549 m</span>.</span>",
+					"travelTime": 104,
+					"length": 549,
+					"id": "M7",
+					"_type": "PrivateTransportManeuverType"
+				},
+				{
+					"position": {
+						"latitude": 40.7299447,
+						"longitude": -74.0396547
+					},
+					"instruction": "Turn <span class=\"direction\">right</span> onto <span class=\"next-street\">Holland Tunnel</span>. <span class=\"distance-description\">Go for <span class=\"length\">1.6 km</span>.</span>",
+					"travelTime": 127,
+					"length": 1580,
+					"id": "M8",
+					"_type": "PrivateTransportManeuverType"
+				},
+				{
+					"position": {
+						"latitude": 40.7274342,
+						"longitude": -74.0212655
+					},
+					"instruction": "Continue on <span class=\"next-street\">Holland Tunnel</span>. <span class=\"distance-description\">Go for <span class=\"length\">1.6 km</span>.</span>",
+					"travelTime": 112,
+					"length": 1550,
+					"id": "M9",
+					"_type": "PrivateTransportManeuverType"
+				},
+				{
+					"position": {
+						"latitude": 40.7216406,
+						"longitude": -74.0073073
+					},
+					"instruction": "Take ramp onto <span class=\"next-street\">Laight St</span> toward <span class=\"sign\"><span lang=\"en\">West St</span>/<span lang=\"en\">RT-9A</span></span>. <span class=\"distance-description\">Go for <span class=\"length\">377 m</span>.</span>",
+					"travelTime": 87,
+					"length": 377,
+					"id": "M10",
+					"_type": "PrivateTransportManeuverType"
+				},
+				{
+					"position": {
+						"latitude": 40.7223058,
+						"longitude": -74.0116417
+					},
+					"instruction": "Turn <span class=\"direction\">right</span> onto <span class=\"next-street\">West St</span> <span class=\"number\">(RT-9A)</span>. <span class=\"distance-description\">Go for <span class=\"length\">23.1 km</span>.</span>",
+					"travelTime": 1564,
+					"length": 23127,
+					"id": "M11",
+					"_type": "PrivateTransportManeuverType"
+				},
+				{
+					"position": {
+						"latitude": 40.9000719,
+						"longitude": -73.896457
+					},
+					"instruction": "Continue on <span class=\"next-street\">Henry Hudson Pkwy</span>. <span class=\"distance-description\">Go for <span class=\"length\">1.6 km</span>.</span>",
+					"travelTime": 77,
+					"length": 1592,
+					"id": "M12",
+					"_type": "PrivateTransportManeuverType"
+				},
+				{
+					"position": {
+						"latitude": 40.9081507,
+						"longitude": -73.8860822
+					},
+					"instruction": "Continue on <span class=\"next-street\">Saw Mill Pkwy N</span>. <span class=\"distance-description\">Go for <span class=\"length\">2.6 km</span>.</span>",
+					"travelTime": 115,
+					"length": 2560,
+					"id": "M13",
+					"_type": "PrivateTransportManeuverType"
+				},
+				{
+					"position": {
+						"latitude": 40.9302843,
+						"longitude": -73.8784432
+					},
+					"instruction": "Take exit <span class=\"exit\">4</span> toward <span class=\"sign\"><span lang=\"en\">Cross County Pkwy</span>/<span lang=\"en\">Hutchinson Pkwy</span></span> onto <span class=\"next-street\">Cross County Pkwy E</span>. <span class=\"distance-description\">Go for <span class=\"length\">7.5 km</span>.</span>",
+					"travelTime": 387,
+					"length": 7482,
+					"id": "M14",
+					"_type": "PrivateTransportManeuverType"
+				},
+				{
+					"position": {
+						"latitude": 40.936389,
+						"longitude": -73.8073647
+					},
+					"instruction": "Keep <span class=\"direction\">left</span> onto <span class=\"next-street\">Hutchinson River Pkwy N</span>. <span class=\"distance-description\">Go for <span class=\"length\">17.4 km</span>.</span>",
+					"travelTime": 778,
+					"length": 17396,
+					"id": "M15",
+					"_type": "PrivateTransportManeuverType"
+				},
+				{
+					"position": {
+						"latitude": 41.0367358,
+						"longitude": -73.6754858
+					},
+					"instruction": "Continue on <span class=\"number\">CT-15</span> <span class=\"next-street\">(Merritt Pkwy)</span>. <span class=\"distance-description\">Go for <span class=\"length\">104 km</span>.</span>",
+					"travelTime": 4456,
+					"length": 103953,
+					"id": "M16",
+					"_type": "PrivateTransportManeuverType"
+				},
+				{
+					"position": {
+						"latitude": 41.5306914,
+						"longitude": -72.7686954
+					},
+					"instruction": "Take exit <span class=\"exit\">68N-E</span> toward <span class=\"sign\"><span lang=\"en\">Hartford</span>/<span lang=\"en\">CT-66 E</span>/<span lang=\"en\">Middletown</span></span> onto <span class=\"number\">I-91 N</span>. <span class=\"distance-description\">Go for <span class=\"length\">27.8 km</span>.</span>",
+					"travelTime": 1048,
+					"length": 27836,
+					"id": "M17",
+					"_type": "PrivateTransportManeuverType"
+				},
+				{
+					"position": {
+						"latitude": 41.747725,
+						"longitude": -72.6589072
+					},
+					"instruction": "Take exit <span class=\"exit\">29</span> toward <span class=\"sign\"><span lang=\"en\">CT-15 N</span>/<span lang=\"en\">E. Hartford</span>/<span lang=\"en\">I-84 E</span>/<span lang=\"en\">Boston</span></span> onto <span class=\"number\">US-5 N</span> <span class=\"next-street\">(Charter Oak Brg)</span>. <span class=\"distance-description\">Go for <span class=\"length\">1.0 km</span>.</span>",
+					"travelTime": 50,
+					"length": 1026,
+					"id": "M18",
+					"_type": "PrivateTransportManeuverType"
+				},
+				{
+					"position": {
+						"latitude": 41.7548704,
+						"longitude": -72.6513433
+					},
+					"instruction": "Continue on <span class=\"number\">CT-15 N</span> toward <span class=\"sign\"><span lang=\"en\">Boston</span>/<span lang=\"en\">I-84 E</span></span>. <span class=\"distance-description\">Go for <span class=\"length\">2.3 km</span>.</span>",
+					"travelTime": 99,
+					"length": 2346,
+					"id": "M19",
+					"_type": "PrivateTransportManeuverType"
+				},
+				{
+					"position": {
+						"latitude": 41.7650199,
+						"longitude": -72.6272786
+					},
+					"instruction": "Keep <span class=\"direction\">left</span> onto <span class=\"number\">I-84</span>. <span class=\"distance-description\">Go for <span class=\"length\">13.5 km</span>.</span>",
+					"travelTime": 491,
+					"length": 13480,
+					"id": "M20",
+					"_type": "PrivateTransportManeuverType"
+				},
+				{
+					"position": {
+						"latitude": 41.8241465,
+						"longitude": -72.4951637
+					},
+					"instruction": "Keep <span class=\"direction\">right</span> onto <span class=\"number\">I-84</span>. <span class=\"distance-description\">Go for <span class=\"length\">39.6 km</span>.</span>",
+					"travelTime": 1405,
+					"length": 39640,
+					"id": "M21",
+					"_type": "PrivateTransportManeuverType"
+				},
+				{
+					"position": {
+						"latitude": 42.0301187,
+						"longitude": -72.1362948
+					},
+					"instruction": "Continue on <span class=\"number\">I-84</span>. <span class=\"distance-description\">Go for <span class=\"length\">12.4 km</span>.</span>",
+					"travelTime": 490,
+					"length": 12409,
+					"id": "M22",
+					"_type": "PrivateTransportManeuverType"
+				},
+				{
+					"position": {
+						"latitude": 42.1266568,
+						"longitude": -72.065742
+					},
+					"instruction": "Take the exit toward <span class=\"sign\"><span lang=\"en\">Worcester</span>/<span lang=\"en\">Boston</span></span> onto <span class=\"number\">I-90 E</span> <span class=\"next-street\">(Mass Pike)</span>. <span class=\"distance-description\">Go for <span class=\"length\">90.2 km</span>.</span>",
+					"travelTime": 3303,
+					"length": 90195,
+					"id": "M23",
+					"_type": "PrivateTransportManeuverType"
+				},
+				{
+					"position": {
+						"latitude": 42.346555,
+						"longitude": -71.0618448
+					},
+					"instruction": "Take <span class=\"direction\">left</span> exit <span class=\"exit\">24A-B-C</span> toward <span class=\"sign\"><span lang=\"en\">Concord NH</span></span> onto <span class=\"number\">I-93 N</span> <span class=\"next-street\">(Thomas P Tip O'Neill Jr Tunnel)</span>. <span class=\"distance-description\">Go for <span class=\"length\">1.8 km</span>.</span>",
+					"travelTime": 108,
+					"length": 1807,
+					"id": "M24",
+					"_type": "PrivateTransportManeuverType"
+				},
+				{
+					"position": {
+						"latitude": 42.358228,
+						"longitude": -71.0514486
+					},
+					"instruction": "Take exit <span class=\"exit\">23</span> toward <span class=\"sign\"><span lang=\"en\">Gov't Ctr</span>/<span lang=\"en\">Gov't Center</span>/<span lang=\"en\">Faneuil Hall</span>/<span lang=\"en\">Financial Dist</span>/<span lang=\"en\">Aquarium</span></span>. <span class=\"distance-description\">Go for <span class=\"length\">547 m</span>.</span>",
+					"travelTime": 61,
+					"length": 547,
+					"id": "M25",
+					"_type": "PrivateTransportManeuverType"
+				},
+				{
+					"position": {
+						"latitude": 42.3615646,
+						"longitude": -71.0551608
+					},
+					"instruction": "Continue on <span class=\"next-street\">North St</span>. <span class=\"distance-description\">Go for <span class=\"length\">226 m</span>.</span>",
+					"travelTime": 54,
+					"length": 226,
+					"id": "M26",
+					"_type": "PrivateTransportManeuverType"
+				},
+				{
+					"position": {
+						"latitude": 42.3602986,
+						"longitude": -71.0571456
+					},
+					"instruction": "Turn <span class=\"direction\">left</span> onto <span class=\"next-street\">Congress St</span>. <span class=\"distance-description\">Go for <span class=\"length\">179 m</span>.</span>",
+					"travelTime": 48,
+					"length": 179,
+					"id": "M27",
+					"_type": "PrivateTransportManeuverType"
+				},
+				{
+					"position": {
+						"latitude": 42.358861,
+						"longitude": -71.056813
+					},
+					"instruction": "Turn <span class=\"direction\">right</span> onto <span class=\"next-street\">State St</span>. <span class=\"distance-description\">Go for <span class=\"length\">84 m</span>.</span>",
+					"travelTime": 16,
+					"length": 84,
+					"id": "M28",
+					"_type": "PrivateTransportManeuverType"
+				},
+				{
+					"position": {
+						"latitude": 42.3588395,
+						"longitude": -71.0578215
+					},
+					"instruction": "Continue on <span class=\"next-street\">Court St</span>. <span class=\"distance-description\">Go for <span class=\"length\">139 m</span>.</span>",
+					"travelTime": 31,
+					"length": 139,
+					"id": "M29",
+					"_type": "PrivateTransportManeuverType"
+				},
+				{
+					"position": {
+						"latitude": 42.3592579,
+						"longitude": -71.0593987
+					},
+					"instruction": "Keep <span class=\"direction\">right</span> onto <span class=\"next-street\">Cambridge St</span>. <span class=\"distance-description\">Go for <span class=\"length\">68 m</span>.</span>",
+					"travelTime": 10,
+					"length": 68,
+					"id": "M30",
+					"_type": "PrivateTransportManeuverType"
+				},
+				{
+					"position": {
+						"latitude": 42.3597904,
+						"longitude": -71.059774
+					},
+					"instruction": "Arrive at <span class=\"street\">Cambridge St</span>. Your destination is on the right.",
+					"travelTime": 0,
+					"length": 0,
+					"id": "M31",
+					"_type": "PrivateTransportManeuverType"
+				}
+			]
+		}
+	],
+	"summary": {
+		"distance": 353446,
+		"trafficTime": 18725,
+		"baseTime": 15449,
+		"flags": [
+			"tollroad",
+			"tunnel",
+			"motorway",
+			"builtUpArea"
+		],
+		"text": "The trip takes <span class=\"length\">353 km</span> and <span class=\"time\">4:17 h</span>.",
+		"travelTime": 15449,
+		"_type": "RouteSummaryType"
+	}
+}
