@@ -1,6 +1,6 @@
 const genders = ["male", "female"];
 const breeds = ["persian", "bengal", "siamese", "maine coon", "sphynx", "ragdoll", "birman", "chartreux", "toyger", "devon rex"];
-const NUM_CATS = 2000;
+const NUM_CATS = 12000;
 
 // CREDIT: https://gist.github.com/Miserlou/c5cd8364bf9b2420bb29
 const cities = require('./cities.json');
