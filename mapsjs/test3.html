@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title></title>
+		<meta name="description" content="">
+		<meta name="viewport" content="initial-scale=1.0, width=device-width" />
+		<script src="https://js.api.here.com/v3/3.1/mapsjs-core.js" type="text/javascript" charset="utf-8"></script>
+		<script src="https://js.api.here.com/v3/3.1/mapsjs-service.js" type="text/javascript" charset="utf-8"></script>
+		<style>
+			#mapContainer {
+				width: 500px;
+				height: 500px;
+			}
+		</style>
+	</head>
+	<body>
+
+		<div id="mapContainer"></div>
+
+		<script>
+		const KEY = 'c1LJuR0Bl2y02PefaQ2d8PvPnBKEN8KdhAOFYR_Bgmw';
+		var platform = new H.service.Platform({
+			'apikey': KEY
+		});
+
+		// Obtain the default map types from the platform object:
+		var defaultLayers = platform.createDefaultLayers();
+		let selectedMap = defaultLayers.vector.normal.map;
+	
+		var map = new H.Map(
+			document.getElementById('mapContainer'),
+			selectedMap,
+			{
+				zoom: 12,
+				center: { lat: 30.22, lng: -92.02 }
+			}
+		);
+
+		// Assuming that the platform and map were initialized, and
+		// the map uses vector base layer
+		// get the OMV provider from the base layer
+		var provider = map.getBaseLayer().getProvider();
+
+		// get the style object for the base layer
+		var parkStyle = provider.getStyle();
+		let doingit = false;
+
+		/*
+		Some notes. So it looks like change fires twice which makes sense, I'm changing it
+		so I use the 'doingit' marker as a way to ensure I don't do it twice
+		*/
+		parkStyle.addEventListener('change', e => {
+			console.log('change');
+			if(parkStyle.getState() === 2 && !doingit) {
+				doingit = true;
+				console.log('set parks to red');
+
+				// query the sub-section of the style configuration
+				// the call removes the subsection from the original configuration
+				// NOTE: they style MUST be in the "READY" state
+				var parkConfig = parkStyle.extractConfig(['landuse.park']);
+
+				// change the color, for the description of the style section
+				// see the Developer's guide
+				parkConfig.layers.landuse.park.draw.polygons.color = '#FF0000'
+
+				// merge the configuration back to the base layer configuration
+				parkStyle.mergeConfig(parkConfig);
+
+
+			}
+		});
+
+		/* This works too...
+		window.setTimeout(() => {
+			// query the sub-section of the style configuration
+			// the call removes the subsection from the original configuration
+			// NOTE: they style MUST be in the "READY" state
+			var parkConfig = parkStyle.extractConfig(['landuse.park']);
+
+			// change the color, for the description of the style section
+			// see the Developer's guide
+			parkConfig.layers.landuse.park.draw.polygons.color = '#FF0000'
+
+			// merge the configuration back to the base layer configuration
+			parkStyle.mergeConfig(parkConfig);
+
+		}, 2000);
+		*/
+		</script>
+	</body>
+</html>

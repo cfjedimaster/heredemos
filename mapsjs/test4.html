@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title></title>
+		<meta name="description" content="">
+		<meta name="viewport" content="initial-scale=1.0, width=device-width" />
+		<script src="https://js.api.here.com/v3/3.1/mapsjs-core.js" type="text/javascript" charset="utf-8"></script>
+		<script src="https://js.api.here.com/v3/3.1/mapsjs-service.js" type="text/javascript" charset="utf-8"></script>
+		<style>
+			#mapContainer {
+				width: 500px;
+				height: 500px;
+			}
+		</style>
+	</head>
+	<body>
+
+		<div id="mapContainer"></div>
+
+		<script>
+		const KEY = 'c1LJuR0Bl2y02PefaQ2d8PvPnBKEN8KdhAOFYR_Bgmw';
+		var platform = new H.service.Platform({
+			'apikey': KEY
+		});
+
+		// Obtain the default map types from the platform object:
+		var defaultLayers = platform.createDefaultLayers();
+		let selectedMap = defaultLayers.vector.normal.map;
+	//{ lat: 30.22, lng: -92.02 }
+	
+		var map = new H.Map(
+			document.getElementById('mapContainer'),
+			selectedMap,
+			{
+				zoom: 10,
+				center: { lat: 52.5, lng: 13.4 }
+			}
+		);
+
+		var style = `
+sources:
+	omv:
+		type: OMV
+		max_zoom: 17
+		min_display_zoom: 1
+# global description of the map, in this example
+# the map background color is white
+scene:
+	background:
+		color: [1.000, 1.000, 1.000, 1.00]
+
+# section contains the style information for the layers
+# that are present on the map
+layers:
+	# user defined name of the rendering layer
+	water_areas:
+		# the section defines where the rendering layer takes
+		# its data from source: omv is mandatoru for the Vector Tile API
+		# layer: water specifies what vector layer is taken
+		# for the rendering see REST API documentation for the
+		# list of available layers.
+		data: {source: omv, layer: water}
+		# section defines how to render the layer
+		draw:
+			polygons:
+				order: 1 # z-order of the layer
+				color: [0.055, 0.604, 0.914, 1.00]
+`;
+		// provided that map was instantiated with the vector layer
+		// as a base layer
+		var baseLayer = map.getBaseLayer();
+		window.setTimeout(() => {
+			baseLayer.getProvider().setStyle(new H.map.Style(style));
+			console.log('set it up the custom yaml');
+			console.log(baseLayer.getProvider().getStyle());
+		}, 5700);
+
+
+		</script>
+	</body>
+</html>

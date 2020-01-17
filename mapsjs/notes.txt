@@ -1,0 +1,6 @@
+test1.html - simplest example based on https://developer.here.com/documentation/maps/dev_guide/topics/get-started.html
+
+test2.html - satellite version
+	Note - you can replace raster.satellite.map w/ raster.normal.transit for traffic stuff, also traffic incidents
+
+test3.html - shows changing style, based on https://developer.here.com/documentation/maps/dev_guide/topics/vector.html
