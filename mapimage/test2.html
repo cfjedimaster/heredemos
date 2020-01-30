@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Map Image API Tester Doohicky</title>
+	<style>
+	.twocol {
+		display: grid;
+		grid-template-columns: 50% 50%;
+	}
+
+	.navcol {
+		display: grid;
+		grid-template-columns: 30% 80%;
+		padding-bottom: 25px;
+	}
+
+	</style>
+	
+</head>
+<body>
+	<div id="app" class="twocol">
+		<div>
+			<div class="navcol">
+				<div>
+					<input type="radio" v-model="center" value="pos" id="pos"> 
+					<label for="pos">Center via Lat/Lon:</label> 
+				</div>
+				<div>
+					<input type="number" v-model="lat" placeholder="Latitude">
+					<input type="number" v-model="lon" placeholder="Longitude">
+				</div>
+			</div>
+			<div class="navcol">
+				<div>
+				<input type="radio" v-model="center" value="address" id="address">
+				<label for="address">Center via Address:</label>
+				</div>
+				<div>
+				<input type="text" v-model="house" placeholder="House #"><br/>
+				<input type="text" v-model="street" placeholder="Street"><br/>
+				<input type="text" v-model="city" placeholder="City"><br/>
+				<input type="text" v-model="zip" placeholder="Zip"><br/>
+				</div>
+			</div>
+			<div class="navcol">
+				<div>
+				Width & Height: 
+				</div>
+				<div>
+				<input type="number" v-model="width" max=2048> <input type="number" v-model="height" max=2048>
+				</div>
+			</div>
+
+			<div class="navcol">
+				<div>Zoom Level:</div>
+				<div><input type="range" min="0" max="20" v-model="zoom"> {{ zoom }}</div>
+			</div>
+
+			<div class="navcol">
+				<div>Show Map Info Box:</div>
+				<div><input type="checkbox" v-model="showInfo"></div>
+			</div>
+
+			<div class="navcol">
+				<div>PIP Map:</div>
+				<div>
+					<input type="checkbox" v-model="showPip" id="showPip"> <label for="showPip">Shown</label><br/>
+					<input type="range" min="-20" max="20" v-model="pip"> {{ pip }}
+				</div>
+			</div>
+
+			<div class="navcol">
+				<div>Scale Bars:</div>
+				<div>
+					<select v-model="sb">
+						<option value=""></option>
+						<option value="k">Kilometers</option>
+						<option value="m">Miles</option>
+						<option value="km">KMs and Miles</option>
+					</select>
+				</div>
+			</div>
+
+			<div class="navcol">
+				<div>Style:</div>
+				<div>
+					<select v-model="style">
+						<option value=""></option>
+						<option v-for="s in styles">{{ s }}</option>
+					</select>
+				</div>
+			</div>
+
+			<!--
+				Note, I encoded both the description and the 'codes' for schemes, but it looks
+				like the code thing isn't really used, just the numeric value
+			-->
+			<div class="navcol">
+				<div>Scheme:</div>
+				<div>
+					<select v-model="scheme">
+						<option value=""></option>
+						<option v-for="(s, idx) in schemes" :value="idx">{{ s.desc }}</option>
+					</select>
+				</div>
+			</div>
+
+			<p>
+				Generated URL:<br/><br/>
+				<span v-html="mapPreview.split('&').join('<br/>&')"></span>
+			</p>
+		</div>
+		<div>
+			<p>
+			<img :src="mapPreview">
+			</p>
+		</div>
+	</div>
+
+	<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+	<script>
+	const apiKey = 'c1LJuR0Bl2y02PefaQ2d8PvPnBKEN8KdhAOFYR_Bgmw';
+	const app = new Vue({
+		el:'#app',
+		data: {
+			zoom:10,
+			width: 400,
+			height: 400,
+			lat:30.22,
+			lon: -92.02,
+			center:'pos',
+			house:'',
+			street:'',
+			city:'',
+			zip:'',
+			showInfo:false,
+			pip:10,
+			showPip:false,
+			sb:'',
+			style:'',
+			styles: ['alps', 'daisy', 'dreamworks', 'flame', 'fleet', 'mini'],
+			scheme: '',
+			schemes: [
+				{code: 'normal.day', desc: 'Normal map view in day light mode.' },
+				{code: 'satellite.day', desc: 'Satellite map view in day light mode.' },
+				{code: 'terrain.day', desc: 'Terrain map view in day light mode.' },
+				{code: 'hybrid.day', desc: 'Satellite map view with streets in day light mode.' },
+				{code: 'normal.day.transit', desc: 'Normal grey map view with public transit in day light mode.' },
+				{code: 'normal.day.grey', desc: 'Normal grey map view in day light mode (used for background maps).' },
+				{code: 'normal.day.mobile', desc: 'Normal map view for small screen devices in day light mode.' },
+				{code: 'normal.night.mobile', desc: 'Normal map view for small screen devices in night mode.' },
+				{code: 'terrain.day.mobile', desc: 'Terrain map view for small screen devices in day light mode.' },
+				{code: 'hybrid.day.mobile', desc: 'Satellite map view with streets for small screen devices in day light mode.' },
+				{code: 'normal.day.transit.mobile', desc: 'Normal grey map view with public transit for small screen devices in day light mode.' },
+				{code: 'normal.day.grey.mobile', desc: 'normal.day.grey.mobile (no desc)' },
+				{code: 'carnav.day.grey', desc: 'Map view designed for navigation devices.' },
+				{code: 'pedestrian.day', desc: 'Map view designed for pedestrians walking by day.' },
+				{code: 'pedestrian.night', desc: 'Map view designed for pedestrians walking by night.' }				
+			]
+		},
+		computed: {
+			mapPreview() {
+				let url = `https://image.maps.ls.hereapi.com/mia/1.6/mapview?apiKey=${apiKey}&z=${this.zoom}&w=${this.width}&h=${this.height}`;
+				if(this.center === 'pos') {
+					url += `&c=${this.lat},${this.lon}`;
+				} else {
+					url += `&n=${this.house}&s=${this.street}&ci=${this.city}&zip=${this.zip}`;
+				}
+				if(this.showInfo) url += `&i`;
+				if(this.showPip) url += `&pip=${this.pip}`;
+				if(this.sb) url += `&sb=${this.sb}`;
+				if(this.style) url += `&style=${this.style}`;
+				if(this.scheme) url += `&t=${this.scheme}`;
+				return url;
+			}
+		}
+	});
+	</script>
+</body>
+</html>
