@@ -17,7 +17,7 @@ fetch(url)
 .then(res => {
 	
 	let view = res.Response.View[0].Result[0].Location.NavigationPosition;
-	console.log(JSON.stringify(view, null, '\t'));
+	//console.log(JSON.stringify(view, null, '\t'));
 	
 	//console.log(JSON.stringify(res, null, '\t'));
 	
@@ -26,11 +26,11 @@ fetch(url)
 });
 
 
-let url2 = `https://reverse.geocoder.ls.hereapi.com/6.2/reversegeocode.json?apiKey=${HERE_API_KEY}&mode=retrieveAreas&prox=46.17123,-1.24126,250`;
+let url2 = `https://reverse.geocoder.ls.hereapi.com/6.2/reversegeocode.json?apiKey=${HERE_API_KEY}&mode=retrieveAreas&at=46.17123,-1.24126`;
 //let url = `https://reverse.geocoder.ls.hereapi.com/6.2/reversegeocode.json?apiKey=${HERE_API_KEY}&mode=retrieveAreas&prox=52.5309,13.3847,250`;
 fetch(url2)
 .then(res => res.json())
 .then(res => {
-	console.log(JSON.stringify(res.Response, null, '\t'));
+	console.log(JSON.stringify(res, null, '\t'));
 	console.log('in reverse');
 });
