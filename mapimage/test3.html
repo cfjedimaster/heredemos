@@ -20,6 +20,9 @@
 	
 </head>
 <body>
+	<p>
+	This demo requires you to click out of the form field for the map to update. Kinda lame, will fix later.
+	</p>
 	<div id="app" class="twocol">
 		<div>
 			<div class="navcol">
@@ -27,8 +30,8 @@
 					Position 1: 
 				</div>
 				<div>
-					<input type="number" v-model="lat1" placeholder="Latitude">
-					<input type="number" v-model="lon1" placeholder="Longitude">
+					<input type="number" v-model="lat1" placeholder="Latitude" @change="update">
+					<input type="number" v-model="lon1" placeholder="Longitude" @change="update">
 				</div>
 			</div>
 
@@ -38,20 +41,20 @@
 					Position 2
 				</div>
 				<div>
-					<input type="number" v-model="lat2" placeholder="Latitude">
-					<input type="number" v-model="lon2" placeholder="Longitude">
+					<input type="number" v-model="lat2" placeholder="Latitude" @change="update">
+					<input type="number" v-model="lon2" placeholder="Longitude" @change="update">
 				</div>
 			</div>
 
 
 			<p>
 				Generated URL:<br/><br/>
-				<span v-html="mapPreview.split('&').join('<br/>&').split('?').join('<br/>?')"></span>
+				<span v-html="url.split('&').join('<br/>&').split('?').join('<br/>?')"></span>
 			</p>
 		</div>
 		<div>
 			<p>
-			<img :src="mapPreview">
+			<img :src="url" v-if="url">
 			</p>
 		</div>
 
@@ -72,15 +75,24 @@
 			lon1: -92.02,
 			lat2:34.22,
 			lon2: -91.02,
+			url:''
 		},
-		computed: {
-			mapPreview() {
+		created() {
+			/*
+			run update() manually once
+			I'm using @change because v-model threw too many 400 errors
+			while you typed.
+			*/
+			this.update();
+		},
+		methods: {
+			update() {
 				let url = `https://image.maps.ls.hereapi.com/mia/1.6/routing?apiKey=${apiKey}&w=${this.width}&h=${this.height}`;
 
 				url += `&waypoint0=${this.lat1},${this.lon1}`;
 				url += `&waypoint1=${this.lat2},${this.lon2}`;
+				this.url = url;
 
-				return url;
 			}
 		}
 	});
