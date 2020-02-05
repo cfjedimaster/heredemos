@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Map Image API - Route Specific</title>
+	<style>
+	.twocol {
+		display: grid;
+		grid-template-columns: 50% 50%;
+	}
+
+	.navcol {
+		display: grid;
+		grid-template-columns: 30% 80%;
+		padding-bottom: 25px;
+	}
+
+	</style>
+	
+</head>
+<body>
+	<div id="app" class="twocol">
+		<div>
+			<div class="navcol">
+				<div>
+					Position 1: 
+				</div>
+				<div>
+					<input type="number" v-model="lat1" placeholder="Latitude">
+					<input type="number" v-model="lon1" placeholder="Longitude">
+				</div>
+			</div>
+
+
+			<div class="navcol">
+				<div>
+					Position 2
+				</div>
+				<div>
+					<input type="number" v-model="lat2" placeholder="Latitude">
+					<input type="number" v-model="lon2" placeholder="Longitude">
+				</div>
+			</div>
+
+
+			<p>
+				Generated URL:<br/><br/>
+				<span v-html="mapPreview.split('&').join('<br/>&').split('?').join('<br/>?')"></span>
+			</p>
+		</div>
+		<div>
+			<p>
+			<img :src="mapPreview">
+			</p>
+		</div>
+
+		<p>
+			<a href="https://developer.here.com/documentation/map-image/dev_guide/topics/what-is.html" target="_new">HERE Map Image API Docs</a>
+		</p>
+	</div>
+
+	<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+	<script>
+	const apiKey = 'c1LJuR0Bl2y02PefaQ2d8PvPnBKEN8KdhAOFYR_Bgmw';
+	const app = new Vue({
+		el:'#app',
+		data: {
+			width: 400,
+			height: 400,
+			lat1:30.22,
+			lon1: -92.02,
+			lat2:34.22,
+			lon2: -91.02,
+		},
+		computed: {
+			mapPreview() {
+				let url = `https://image.maps.ls.hereapi.com/mia/1.6/routing?apiKey=${apiKey}&w=${this.width}&h=${this.height}`;
+
+				url += `&waypoint0=${this.lat1},${this.lon1}`;
+				url += `&waypoint1=${this.lat2},${this.lon2}`;
+
+				return url;
+			}
+		}
+	});
+	</script>
+</body>
+</html>
