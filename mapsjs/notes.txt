@@ -4,3 +4,10 @@ test2.html - satellite version
 	Note - you can replace raster.satellite.map w/ raster.normal.transit for traffic stuff, also traffic incidents
 
 test3.html - shows changing style, based on https://developer.here.com/documentation/maps/dev_guide/topics/vector.html
+
+
+
+
+MISC
+To enable pan zoom, add the events library and:
+			var behavior = new H.mapevents.Behavior(new H.mapevents.MapEvents(map));

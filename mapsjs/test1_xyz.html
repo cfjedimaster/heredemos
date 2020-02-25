@@ -49,7 +49,6 @@
 		// Create the default UI:
     	var ui = H.ui.UI.createDefault(map, defaultLayers);
 
-		
 		const XYZ_TOKEN = 'AFJj375eSbmD0w3reC4aGQA';
 		const service = platform.getXYZService({
 			token: XYZ_TOKEN,
@@ -57,7 +56,6 @@
 
 		const XYZ_SPACE = '73KBVoD8';
 		const mySpaceProvider = new H.service.xyz.Provider(service, XYZ_SPACE, {
-			'min': 14
 		});
 		
 
@@ -65,18 +63,6 @@
 		// add a layer to the map
 		map.addLayer(mySpaceLayer);
 		
-
-		/*
-	  const service = platform.getXYZService({
-        token: 'AFwuEjwjTKCaGxJZBvo3yQA',
-      });
-
-      // create a provider for the custom user defined data
-      const customSpaceProvider = new H.service.xyz.Provider(service, 'OmxkjhzN');
-      const customSpaceLayer = new H.map.layer.TileLayer(customSpaceProvider);
-	  		map.addLayer(customSpaceLayer);
-*/
-		console.log('smack my map up');
 		</script>
 	</body>
 </html>
