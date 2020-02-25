@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>Test XYZ</title>
+		<meta name="description" content="">
+		<meta name="viewport" content="initial-scale=1.0, width=device-width" />
+		<script src="https://js.api.here.com/v3/3.1/mapsjs-core.js" type="text/javascript" charset="utf-8"></script>
+		<script src="https://js.api.here.com/v3/3.1/mapsjs-service.js" type="text/javascript" charset="utf-8"></script>
+    	<script src="https://js.api.here.com/v3/3.1/mapsjs-mapevents.js"
+       		type="text/javascript" charset="utf-8"></script>
+		<script src="https://js.api.here.com/v3/3.1/mapsjs-ui.js"
+            type="text/javascript" charset="utf-8"></script>
+        <link rel="stylesheet" type="text/css"
+            href="https://js.api.here.com/v3/3.1/mapsjs-ui.css" />
+		<style>
+			#mapContainer {
+				width: 500px;
+				height: 500px;
+			}
+		</style>
+	</head>
+	<body>
+
+		<div id="mapContainer"></div>
+
+		<div id="result">Click for lat/lng</div>
+
+		<script>
+		const KEY = 'c1LJuR0Bl2y02PefaQ2d8PvPnBKEN8KdhAOFYR_Bgmw';
+		var platform = new H.service.Platform({
+			'apikey': KEY
+		});
+
+		var geocoder = platform.getGeocodingService();
+
+		// Obtain the default map types from the platform object:
+		var defaultLayers = platform.createDefaultLayers();
+
+		var map = new H.Map(
+			document.getElementById('mapContainer'),
+			defaultLayers.vector.normal.map,
+			{
+				zoom: 5,
+				center: { lat: 30.22, lng: -92.02 },
+				pixelRatio: window.devicePixelRatio || 1
+			}
+		);
+		
+
+		var behavior = new H.mapevents.Behavior(new H.mapevents.MapEvents(map));
+
+		// Create the default UI:
+    	var ui = H.ui.UI.createDefault(map, defaultLayers);
+		
+		let resultDiv = document.querySelector('#result');
+
+		map.addEventListener('tap', function (evt) {
+			var coord = map.screenToGeo(
+				evt.currentPointer.viewportX,
+				evt.currentPointer.viewportY);
+			let lat = coord.lat.toFixed(4);
+			let lng = coord.lng.toFixed(4);
+			let html = `Clicked at lat/lng ${lat}, ${lng}`;
+
+
+			var reverseGeocodingParameters = {
+				prox: lat + ',' + lng,
+				mode: 'retrieveAddresses',
+				maxresults: 1
+			};
+
+			geocoder.reverseGeocode(
+				reverseGeocodingParameters,
+				e => {
+					let result = e.Response.View[0].Result[0];
+					let address = result.Location.Address.Label;
+					resultDiv.innerHTML = `${html}<br/>${address}`;
+				},
+				function(e) { alert(e); }
+			);
+
+		});		
+		</script>
+	</body>
+</html>
