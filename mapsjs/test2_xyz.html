@@ -57,11 +57,18 @@
 		const mySpaceProvider = new H.service.xyz.Provider(service, XYZ_SPACE, {
 		});
 		
+		mySpaceProvider.addEventListener('tap', e => {
+			console.log('tap event on xyz');
+			console.log(e);
+		});
 
 		const mySpaceLayer = new H.map.layer.TileLayer(mySpaceProvider);
 		// add a layer to the map
 		map.addLayer(mySpaceLayer);
 		
+		map.addEventListener('tap', function (evt) {
+			console.log('main map tap', evt);
+		});
 		</script>
 	</body>
 </html>

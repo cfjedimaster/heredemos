@@ -1,0 +1,3 @@
+
+Explains some of the results: https://developer.here.com/documentation/traffic/dev_guide/topics/common-acronyms.html
+
