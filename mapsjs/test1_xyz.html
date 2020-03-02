@@ -1,67 +1,62 @@
 <!DOCTYPE html>
 <html>
-	<head>
-		<meta charset="utf-8">
-		<title>Test XYZ</title>
-		<meta name="description" content="">
-		<meta name="viewport" content="initial-scale=1.0, width=device-width" />
-		<script src="https://js.api.here.com/v3/3.1/mapsjs-core.js" type="text/javascript" charset="utf-8"></script>
-		<script src="https://js.api.here.com/v3/3.1/mapsjs-service.js" type="text/javascript" charset="utf-8"></script>
-    	<script src="https://js.api.here.com/v3/3.1/mapsjs-mapevents.js"
-       		type="text/javascript" charset="utf-8"></script>
-		<script src="https://js.api.here.com/v3/3.1/mapsjs-ui.js"
-            type="text/javascript" charset="utf-8"></script>
-        <link rel="stylesheet" type="text/css"
-            href="https://js.api.here.com/v3/3.1/mapsjs-ui.css" />
-		<style>
-			#mapContainer {
-				width: 500px;
-				height: 500px;
-			}
-		</style>
-	</head>
-	<body>
+  <head>
+    <meta charset="utf-8" />
+    <title>Test XYZ</title>
+    <meta name="description" content="" />
+    <meta name="viewport" content="initial-scale=1.0, width=device-width" />
+    <script src="https://js.api.here.com/v3/3.1/mapsjs-core.js" type="text/javascript" charset="utf-8"></script>
+    <script src="https://js.api.here.com/v3/3.1/mapsjs-service.js" type="text/javascript" charset="utf-8"></script>
+    <script src="https://js.api.here.com/v3/3.1/mapsjs-mapevents.js" type="text/javascript" charset="utf-8"></script>
+    <script src="https://js.api.here.com/v3/3.1/mapsjs-ui.js" type="text/javascript" charset="utf-8"></script>
+    <link rel="stylesheet" type="text/css" href="https://js.api.here.com/v3/3.1/mapsjs-ui.css" />
+    <style>
+      #mapContainer {
+        width: 500px;
+        height: 500px;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="mapContainer"></div>
 
-		<div id="mapContainer"></div>
+    <script>
+	const KEY = "c1LJuR0Bl2y02PefaQ2d8PvPnBKEN8KdhAOFYR_Bgmw";
+	var platform = new H.service.Platform({
+		apikey: KEY
+	});
 
-		<script>
-		const KEY = 'c1LJuR0Bl2y02PefaQ2d8PvPnBKEN8KdhAOFYR_Bgmw';
-		var platform = new H.service.Platform({
-			'apikey': KEY
-		});
+	// Obtain the default map types from the platform object:
+	var defaultLayers = platform.createDefaultLayers();
 
-		// Obtain the default map types from the platform object:
-		var defaultLayers = platform.createDefaultLayers();
+	var map = new H.Map(
+		document.getElementById('mapContainer'),
+		defaultLayers.vector.normal.map,
+		{
+			zoom: 3,
+			center: { lat: 38.7984, lng: -96.3944 },
+			pixelRatio: window.devicePixelRatio || 1
+		}
+	);
 
-		var map = new H.Map(
-			document.getElementById('mapContainer'),
-			defaultLayers.vector.normal.map,
-			{
-				zoom: 3,
-				center: { lat: 38.7984, lng: -96.3944 },
-				pixelRatio: window.devicePixelRatio || 1
-			}
-		);
-		
-		var behavior = new H.mapevents.Behavior(new H.mapevents.MapEvents(map));
+	var behavior = new H.mapevents.Behavior(new H.mapevents.MapEvents(map));
 
-		// Create the default UI:
-    	var ui = H.ui.UI.createDefault(map, defaultLayers);
+	// Create the default UI:
+	var ui = H.ui.UI.createDefault(map, defaultLayers);
 
-		const XYZ_TOKEN = 'AFJj375eSbmD0w3reC4aGQA';
-		const service = platform.getXYZService({
-			token: XYZ_TOKEN,
-		});
+	const XYZ_TOKEN = 'AFJj375eSbmD0w3reC4aGQA';
+	const service = platform.getXYZService({
+		token: XYZ_TOKEN,
+	});
 
-		const XYZ_SPACE = '73KBVoD8';
-		const mySpaceProvider = new H.service.xyz.Provider(service, XYZ_SPACE, {
-		});
-		
+	const XYZ_SPACE = '73KBVoD8';
+	const mySpaceProvider = new H.service.xyz.Provider(service, XYZ_SPACE, {
+	});
 
-		const mySpaceLayer = new H.map.layer.TileLayer(mySpaceProvider);
-		// add a layer to the map
-		map.addLayer(mySpaceLayer);
-		
-		</script>
-	</body>
+
+	const mySpaceLayer = new H.map.layer.TileLayer(mySpaceProvider);
+	// add a layer to the map
+	map.addLayer(mySpaceLayer);
+	</script>
+  </body>
 </html>

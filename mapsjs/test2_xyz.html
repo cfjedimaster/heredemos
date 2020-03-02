@@ -7,16 +7,13 @@
 		<meta name="viewport" content="initial-scale=1.0, width=device-width" />
 		<script src="https://js.api.here.com/v3/3.1/mapsjs-core.js" type="text/javascript" charset="utf-8"></script>
 		<script src="https://js.api.here.com/v3/3.1/mapsjs-service.js" type="text/javascript" charset="utf-8"></script>
-    	<script src="https://js.api.here.com/v3/3.1/mapsjs-mapevents.js"
-       		type="text/javascript" charset="utf-8"></script>
-		<script src="https://js.api.here.com/v3/3.1/mapsjs-ui.js"
-            type="text/javascript" charset="utf-8"></script>
-        <link rel="stylesheet" type="text/css"
-            href="https://js.api.here.com/v3/3.1/mapsjs-ui.css" />
+    	<script src="https://js.api.here.com/v3/3.1/mapsjs-mapevents.js" type="text/javascript" charset="utf-8"></script>
+		<script src="https://js.api.here.com/v3/3.1/mapsjs-ui.js" type="text/javascript" charset="utf-8"></script>
+        <link rel="stylesheet" type="text/css" href="https://js.api.here.com/v3/3.1/mapsjs-ui.css" />
 		<style>
 			#mapContainer {
-				width: 500px;
-				height: 500px;
+				width: 750px;
+				height: 700px;
 			}
 		</style>
 	</head>
@@ -57,17 +54,37 @@
 		const mySpaceProvider = new H.service.xyz.Provider(service, XYZ_SPACE, {
 		});
 		
-		mySpaceProvider.addEventListener('tap', e => {
-			console.log('tap event on xyz');
-			console.log(e);
-		});
-
 		const mySpaceLayer = new H.map.layer.TileLayer(mySpaceProvider);
 		// add a layer to the map
 		map.addLayer(mySpaceLayer);
-		
-		map.addEventListener('tap', function (evt) {
-			console.log('main map tap', evt);
+
+		mySpaceProvider.getStyle().setInteractive(['xyz'], true);
+
+		let bubble;
+		// Add 'tap' event listener, that opens info bubble
+		mySpaceProvider.addEventListener('tap', function (evt) {
+			let position = map.screenToGeo(evt.currentPointer.viewportX, evt.currentPointer.viewportY),
+				data = evt.target.getData(),
+				rows = Object.keys(data.properties)
+				.map((key) => `<tr><td>${key}:</td><td>${data.properties[key]}</td></tr>`);
+
+			console.log(data);
+
+			if (!bubble) {
+				bubble = new H.ui.InfoBubble(position, { content: '' })
+				ui.addBubble(bubble);
+			}
+			bubble.setContent(`
+			<div style="max-height:300px; overflow:auto">
+			<table id="bubbleInfo" style="font-size:10px">
+			${rows.join('')}
+			</table>
+			</div>`);
+
+			bubble.setPosition(position);
+			bubble.open();
+
+			map.setCenter(position, true);	
 		});
 		</script>
 	</body>
