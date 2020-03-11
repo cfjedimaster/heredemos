@@ -5,7 +5,7 @@ test2.html - satellite version
 
 test3.html - shows changing style, based on https://developer.here.com/documentation/maps/dev_guide/topics/vector.html
 
-
+test_just_base_with_ui.html - meant to be a base, located at X,Y, with default UI + tap/drag events
 
 
 MISC
