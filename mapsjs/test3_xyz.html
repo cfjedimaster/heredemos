@@ -64,21 +64,16 @@
 		// Add 'tap' event listener, that opens info bubble
 		mySpaceProvider.addEventListener('tap', function (evt) {
 			let position = map.screenToGeo(evt.currentPointer.viewportX, evt.currentPointer.viewportY),
-				data = evt.target.getData(),
-				rows = Object.keys(data.properties)
-				.map((key) => `<tr><td>${key}:</td><td>${data.properties[key]}</td></tr>`);
-
-			console.log(data);
-
+				data = evt.target.getData();
+				
 			if (!bubble) {
 				bubble = new H.ui.InfoBubble(position, { content: '' })
 				ui.addBubble(bubble);
 			}
 			bubble.setContent(`
-			<div style="max-height:300px; overflow:auto">
-			<table id="bubbleInfo" style="font-size:10px">
-			${rows.join('')}
-			</table>
+			<div style="max-height:300px; overflow:auto;width: 300px;">
+			<h2>${data.properties['properties.Name']}</h2>
+			Code: ${data.properties['properties.Code']}
 			</div>`);
 
 			bubble.setPosition(position);

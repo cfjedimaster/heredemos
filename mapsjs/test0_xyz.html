@@ -44,19 +44,6 @@
 	// Create the default UI:
 	var ui = H.ui.UI.createDefault(map, defaultLayers);
 
-	const XYZ_TOKEN = 'AFJj375eSbmD0w3reC4aGQA';
-	const service = platform.getXYZService({
-		token: XYZ_TOKEN,
-	});
-
-	const XYZ_SPACE = '73KBVoD8';
-	const mySpaceProvider = new H.service.xyz.Provider(service, XYZ_SPACE, {
-	});
-
-
-	const mySpaceLayer = new H.map.layer.TileLayer(mySpaceProvider);
-	// add a layer to the map
-	map.addLayer(mySpaceLayer);
 	</script>
   </body>
 </html>
