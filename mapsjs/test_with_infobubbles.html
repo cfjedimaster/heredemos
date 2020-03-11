@@ -46,9 +46,41 @@
 		// Create the default UI:
     	var ui = H.ui.UI.createDefault(map, defaultLayers);
 		
-    	map.addObject(new H.map.Marker({lat:30.9087, lng:-92.1079}));
-		map.addObject(new H.map.Marker({lat:31.57, lng:-89.3481}));
-		map.addObject(new H.map.Marker({lat:32.9818, lng:-96.8364}));
+		var group = new H.map.Group();
+		map.addObject(group);
+		group.addEventListener('tap', evt => {
+			// event target is the marker itself, group is a parent event target
+			// for all objects that it contains
+			var bubble =  new H.ui.InfoBubble(evt.target.getGeometry(), {
+				// read custom data
+				content: evt.target.getData()
+			});
+			// show info bubble
+			ui.addBubble(bubble);
+		}, false);
+
+		var marker = new H.map.Marker({lat:30.9087, lng:-92.1079});
+		// add custom data to the marker
+		let html = `
+<h2>Lafayette, LA</h2>
+<p>
+	This is a test.
+</p>
+`;
+		marker.setData(html);
+		group.addObject(marker);
+		
+		var marker2 = new H.map.Marker({lat:31.57, lng:-89.3481});
+		// add custom data to the marker
+		html = `
+<h2>NOLA</h2>
+<p>
+	This is a test.
+</p>
+`;
+		marker2.setData(html);
+		group.addObject(marker2);
+
 		</script>
 	</body>
 </html>
