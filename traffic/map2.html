@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>Test</title>
+		<meta name="description" content="">
+		<meta name="viewport" content="initial-scale=1.0, width=device-width" />
+		<script src="https://js.api.here.com/v3/3.1/mapsjs-core.js" type="text/javascript" charset="utf-8"></script>
+		<script src="https://js.api.here.com/v3/3.1/mapsjs-service.js" type="text/javascript" charset="utf-8"></script>
+    	<script src="https://js.api.here.com/v3/3.1/mapsjs-mapevents.js" type="text/javascript" charset="utf-8"></script>
+		<script src="https://js.api.here.com/v3/3.1/mapsjs-ui.js" type="text/javascript" charset="utf-8"></script>
+        <link rel="stylesheet" type="text/css" href="https://js.api.here.com/v3/3.1/mapsjs-ui.css" />
+		<style>
+			#mapContainer {
+				width: 800px;
+				height: 800px;
+			}
+		</style>
+	</head>
+	<body>
+
+		<div id="mapContainer"></div>
+
+		<script>
+		const KEY = 'c1LJuR0Bl2y02PefaQ2d8PvPnBKEN8KdhAOFYR_Bgmw';
+		var platform = new H.service.Platform({
+			'apikey': KEY
+		});
+
+		// Obtain the default map types from the platform object:
+		var defaultLayers = platform.createDefaultLayers();
+
+		var map = new H.Map(
+			document.getElementById('mapContainer'),
+			defaultLayers.vector.normal.map,
+			{
+				zoom: 11,
+				center: { lat: 47.606, lng: -122.33 },
+				pixelRatio: window.devicePixelRatio || 1
+			}
+		);
+		
+
+		var behavior = new H.mapevents.Behavior(new H.mapevents.MapEvents(map));
+
+		// Create the default UI:
+		var ui = H.ui.UI.createDefault(map, defaultLayers);
+		
+		// add traffic
+		//map.addLayer(defaultLayers.vector.normal.traffic);
+		let x = new Date('1/5/2020');
+		var trafficService = platform.getTrafficService(),
+		provider = new H.service.traffic.flow.Provider(trafficService, 3000);
+		map.addLayer(new H.map.layer.TileLayer(provider));
+			
+		</script>
+	</body>
+</html>
