@@ -1,0 +1,12 @@
+test1.html - base test1
+test2.html - focused on Lafayette
+test3.html - setting rotation/pan stuff
+test4.html - globe view
+test5.html - use console to run setTheme() to show an async loading of a theme
+test6.html - animation examples
+test7.html - use geojson
+
+good set of examples - https://developer.here.com/tutorials/harpgl/
+
+
+Online editor: https://heremaps.github.io/harp-map-editor
