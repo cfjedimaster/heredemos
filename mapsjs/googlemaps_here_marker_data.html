@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>Test</title>
+		<meta name="description" content="">
+		<meta name="viewport" content="initial-scale=1.0, width=device-width" />
+		<script src="https://js.api.here.com/v3/3.1/mapsjs-core.js" type="text/javascript" charset="utf-8"></script>
+		<script src="https://js.api.here.com/v3/3.1/mapsjs-service.js" type="text/javascript" charset="utf-8"></script>
+    	<script src="https://js.api.here.com/v3/3.1/mapsjs-mapevents.js" type="text/javascript" charset="utf-8"></script>
+		<script src="https://js.api.here.com/v3/3.1/mapsjs-ui.js" type="text/javascript" charset="utf-8"></script>
+        <link rel="stylesheet" type="text/css" href="https://js.api.here.com/v3/3.1/mapsjs-ui.css" />
+		<style>
+		body,html {
+			margin: 0;
+			padding: 0;
+		}
+		#mapContainer {
+			width: 100vw; 
+			height: 100vh; 
+		}
+		</style>
+	</head>
+	<body>
+
+		<div id="mapContainer"></div>
+
+		<script>
+		const KEY = 'c1LJuR0Bl2y02PefaQ2d8PvPnBKEN8KdhAOFYR_Bgmw';
+		var platform = new H.service.Platform({
+			'apikey': KEY
+		});
+
+		// Obtain the default map types from the platform object:
+		var defaultLayers = platform.createDefaultLayers();
+
+		var map = new H.Map(
+			document.getElementById('mapContainer'),
+			defaultLayers.vector.normal.map,
+			{
+				zoom: 3,
+				center: {lat: 2.8, lng: -187.3},
+				pixelRatio: window.devicePixelRatio || 1
+			}
+		);
+		
+		// allow for default touch/drag support
+		var behavior = new H.mapevents.Behavior(new H.mapevents.MapEvents(map));
+
+		// Create the default UI:
+    	var ui = H.ui.UI.createDefault(map, defaultLayers);
+		
+		loadData();
+
+		async function loadData() {
+			let resp = await fetch('https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/2.5_week.geojson');
+			let data = await resp.json();
+
+			for (var i = 0; i < data.features.length; i++) {
+				var coords = data.features[i].geometry.coordinates;
+				map.addObject(new H.map.Marker({lat:coords[1], lng:coords[0]}));
+			}
+		}
+		</script>
+	</body>
+</html>
