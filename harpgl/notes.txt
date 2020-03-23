@@ -5,6 +5,7 @@ test4.html - globe view
 test5.html - use console to run setTheme() to show an async loading of a theme
 test6.html - animation examples
 test7.html - use geojson
+test8.html - use my cats xyz space
 
 good set of examples - https://developer.here.com/tutorials/harpgl/
 
