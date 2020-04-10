@@ -101,6 +101,7 @@
 						group.removeObject(searchMarkers.shift());
 					}
 				}
+				if(bubble) bubble.close();
 
 				console.log(`search for ${box.value}`);
 				let resp = await fetch(`https://discover.search.hereapi.com/v1/discover?apikey=${apiKey}&q=${encodeURIComponent(box.value)}&at=30.22,-92.02&limit=10`);
