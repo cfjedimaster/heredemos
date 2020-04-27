@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>Test</title>
+		<meta name="description" content="">
+		<meta name="viewport" content="initial-scale=1.0, width=device-width" />
+		<script src="https://js.api.here.com/v3/3.1/mapsjs-core.js" type="text/javascript" charset="utf-8"></script>
+		<script src="https://js.api.here.com/v3/3.1/mapsjs-service.js" type="text/javascript" charset="utf-8"></script>
+    	<script src="https://js.api.here.com/v3/3.1/mapsjs-mapevents.js" type="text/javascript" charset="utf-8"></script>
+		<script src="https://js.api.here.com/v3/3.1/mapsjs-ui.js" type="text/javascript" charset="utf-8"></script>
+        <link rel="stylesheet" type="text/css" href="https://js.api.here.com/v3/3.1/mapsjs-ui.css" />
+		<style>
+			#mapContainer {
+				width: 500px;
+				height: 500px;
+			}
+		</style>
+	</head>
+	<body>
+
+		<div id="app">
+			<div id="mapContainer"></div>
+			<pre>{{ result }}</pre>
+		</div>
+
+		<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+		<script>
+		const KEY = 'c1LJuR0Bl2y02PefaQ2d8PvPnBKEN8KdhAOFYR_Bgmw';
+		const platform = new H.service.Platform({
+			'apikey': KEY
+		});
+
+		// Get an instance of the search service:
+		const service = platform.getSearchService();
+
+		let map;
+
+		const app = new Vue({
+			el:'#app', 
+			data: {
+				result:''
+			},
+			mounted() {
+				// Obtain the default map types from the platform object:
+				var defaultLayers = platform.createDefaultLayers();
+
+				map = new H.Map(
+					document.getElementById('mapContainer'),
+					defaultLayers.vector.normal.map,
+					{
+						zoom: 5,
+						center: { lat: 30.22, lng: -92.02 },
+						pixelRatio: window.devicePixelRatio || 1
+					}
+				);
+				
+				var behavior = new H.mapevents.Behavior(new H.mapevents.MapEvents(map));
+				var ui = H.ui.UI.createDefault(map, defaultLayers);
+
+				map.addEventListener('tap', evt => {
+ 					var coord = map.screenToGeo(evt.currentPointer.viewportX, evt.currentPointer.viewportY);
+					 console.log(coord.lat);
+					 console.log(`${coord.lat},${coord.lng}`);
+					service.reverseGeocode({
+						at:`${coord.lat},${coord.lng}`
+					}, res => {
+						console.log('got a result');
+						console.log(res);
+						this.result = res.items[0];
+					});
+				}, false);
+
+			},
+			methods: {
+				geocode() {
+					if(this.input === '') return;
+					service.geocode({
+						q: this.input
+					}, (result) => {
+						// Add a marker for each location found
+						result.items.forEach((item) => {
+							map.addObject(new H.map.Marker(item.position));
+						});
+					}, alert);
+				}
+			}
+		});
+
+
+		
+		</script>
+	</body>
+</html>

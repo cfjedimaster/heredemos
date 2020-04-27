@@ -24,7 +24,7 @@ let space = 'PguBbU3o';
 const cats = new harp.OmvDataSource({
     baseUrl: "https://xyz.api.here.com/hub/spaces/" + space + "/tile/web",
     apiFormat: harp.APIFormat.XYZSpace,
-    authenticationCode: 'AP8d9l1MT2mnncAq4kIBxAA', //Use this token!
+    authenticationCode: 'AP8d9l1MT2mnncAq4kIBxAA', 
  });
 
  map.addDataSource(cats).then(() => {
