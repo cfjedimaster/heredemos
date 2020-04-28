@@ -5,12 +5,9 @@ const canvas = document.getElementById('map');
 const map = new harp.MapView({
     canvas,
     theme:
-        "https://unpkg.com/@here/harp-map-theme@latest/resources/berlin_tilezen_base_globe.json",
-        projection: harp.sphereProjection,
-   //For tile cache optimization:
-   maxVisibleDataSourceTiles: 40, 
-   tileCacheSize: 100
-});
+        "https://unpkg.com/@here/harp-map-theme@latest/resources/berlin_tilezen_night_reduced.json"
+    });
+    
 const controls = new harp.MapControls(map);
 const omvDataSource = new harp.OmvDataSource({
     baseUrl: "https://vector.hereapi.com/v2/vectortiles/base/mc",
