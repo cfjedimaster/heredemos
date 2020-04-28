@@ -1,0 +1,48 @@
+<html>
+    <head>
+        <style>
+            body,
+            html {
+                border: 0;
+                margin: 0;
+                padding: 0;
+                font-family: Arial, Helvetica, sans-serif;
+            }
+            #map {
+                height: 100vh;
+                width: 100vw;
+            }
+
+            #infoBox {
+                display: block;
+                top: 10px;
+                z-index: 15;
+                right: 10px;
+                width: 400px;
+                height: 440px;
+                position: absolute;
+                padding: 15px;
+
+                background-color: rgba(45, 59, 45, 1);
+                color: white;
+                opacity: 1;
+            }
+        </style>
+        <script src="https://unpkg.com/three/build/three.min.js"></script>
+        <script src="https://unpkg.com/@here/harp.gl/dist/harp.js"></script>
+    </head>
+    <body>
+        <div id="infoBox">
+            <div id="default">
+            <h1>Music Explorer</h1>
+            <p>
+            This map locations associated with certain songs. Click the marker for more information.
+            </p>
+            </div>
+            <div id="info">
+            </div>
+        </div>
+        <canvas id="map"></canvas>
+        <script src="music.js"></script>
+    </body>
+</html>
