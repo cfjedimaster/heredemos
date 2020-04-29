@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>Test</title>
+		<meta name="description" content="">
+		<meta name="viewport" content="initial-scale=1.0, width=device-width" />
+		<script src="https://js.api.here.com/v3/3.1/mapsjs-core.js" type="text/javascript" charset="utf-8"></script>
+		<script src="https://js.api.here.com/v3/3.1/mapsjs-service.js" type="text/javascript" charset="utf-8"></script>
+    	<script src="https://js.api.here.com/v3/3.1/mapsjs-mapevents.js" type="text/javascript" charset="utf-8"></script>
+		<script src="https://js.api.here.com/v3/3.1/mapsjs-ui.js" type="text/javascript" charset="utf-8"></script>
+        <link rel="stylesheet" type="text/css" href="https://js.api.here.com/v3/3.1/mapsjs-ui.css" />
+		<style>
+			#mapContainer {
+				width: 500px;
+				height: 500px;
+			}
+		</style>
+	</head>
+	<body>
+
+		<p>
+		<label for="start">Starting Location:</label> <input type="text" id="start" value="lafayette, la"><br/>
+		<label for="end">End Location:</label> <input type="text" id="end" value="new orleans, la"> <br/>
+		<button id="routeButton">Get Route</button>
+		</p>
+		<div id="mapContainer"></div>
+
+		<script>
+		const KEY = 'c1LJuR0Bl2y02PefaQ2d8PvPnBKEN8KdhAOFYR_Bgmw';
+		var platform = new H.service.Platform({
+			'apikey': KEY
+		});
+
+		// Obtain the default map types from the platform object:
+		var defaultLayers = platform.createDefaultLayers();
+
+		var map = new H.Map(
+			document.getElementById('mapContainer'),
+			defaultLayers.vector.normal.map,
+			{
+				zoom: 5,
+				center: { lat: 30.22, lng: -92.02 },
+				pixelRatio: window.devicePixelRatio || 1
+			}
+		);
+		
+
+		var behavior = new H.mapevents.Behavior(new H.mapevents.MapEvents(map));
+
+		// Create the default UI:
+    	var ui = H.ui.UI.createDefault(map, defaultLayers);
+		
+		const geocoder = platform.getSearchService();
+		var router = platform.getRoutingService();
+
+		let startField, endField, routeBtn;
+
+		document.addEventListener('DOMContentLoaded', () => {
+			startField = document.querySelector('#start');
+			endField = document.querySelector('#end');
+			routeBtn = document.querySelector('#routeButton');
+			routeBtn.addEventListener('click', doRoute, false);
+		}, false);
+
+		async function doRoute() {
+			let s = startField.value;
+			let e = endField.value;
+			console.log(`Route from ${s} to ${e}`);
+			let sLoc = await geocode(s);
+			console.log(sLoc);
+			let eLoc = await geocode(e);
+			console.log(eLoc);
+
+			let routingParameters = {
+				// The routing mode:
+				'mode': 'fastest;car',
+				// The start point of the route:
+				'waypoint0': `geo!${sLoc.lat},${sLoc.lng}`,
+				// The end point of the route:
+				'waypoint1': `geo!${eLoc.lat},${eLoc.lng}`,
+				// To retrieve the shape of the route we choose the route
+				// representation mode 'display'
+				'representation': 'display'
+			};
+
+			router.calculateRoute(routingParameters, routeResult, error => {
+				alert(error.message);
+			});
+
+		}
+
+		function routeResult(result) {
+			let route = result.response.route[0];
+			console.log(route);
+
+			// Pick the route's shape:
+			routeShape = route.shape;
+
+			// Create a linestring to use as a point source for the route line
+			linestring = new H.geo.LineString();
+
+			// Push all the points in the shape into the linestring:
+			routeShape.forEach(function(point) {
+				let parts = point.split(',');
+				linestring.pushLatLngAlt(parts[0], parts[1]);
+			});
+
+			// Retrieve the mapped positions of the requested waypoints:
+			startPoint = route.waypoint[0].mappedPosition;
+			endPoint = route.waypoint[1].mappedPosition;
+
+			// Create a polyline to display the route:
+			var routeLine = new H.map.Polyline(linestring, {
+				style: { strokeColor: 'blue', lineWidth: 3 }
+			});
+
+			// Create a marker for the start point:
+			var startMarker = new H.map.Marker({
+				lat: startPoint.latitude,
+				lng: startPoint.longitude
+			});
+
+			// Create a marker for the end point:
+			var endMarker = new H.map.Marker({
+				lat: endPoint.latitude,
+				lng: endPoint.longitude
+			});
+
+			// Add the route polyline and the two markers to the map:
+			map.addObjects([routeLine, startMarker, endMarker]);
+
+			// Set the map's viewport to make the whole route visible:
+			// ray note - this is a bit too zoomed in imo
+			map.getViewModel().setLookAtData({bounds: routeLine.getBoundingBox()});
+
+		}
+
+		async function geocode(s) {
+			return new Promise((resolve, reject) => {
+				geocoder.geocode({
+					q: s
+				}, (result) => {
+					resolve(result.items[0].position);
+				}, reject);
+			});
+		}
+
+		</script>
+	</body>
+</html>
