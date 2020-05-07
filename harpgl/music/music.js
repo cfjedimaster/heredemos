@@ -1,13 +1,12 @@
 const canvas = document.getElementById('map');
 
-//"https://unpkg.com/@here/harp-map-theme@latest/resources/berlin_tilezen_base_globe.json",
 
 const map = new harp.MapView({
     canvas,
     theme:
         "https://unpkg.com/@here/harp-map-theme@latest/resources/berlin_tilezen_night_reduced.json"
     });
-    
+
 const controls = new harp.MapControls(map);
 const omvDataSource = new harp.OmvDataSource({
     baseUrl: "https://vector.hereapi.com/v2/vectortiles/base/mc",
@@ -23,14 +22,16 @@ const omvDataSource = new harp.OmvDataSource({
 map.addDataSource(omvDataSource);
 
 map.setCameraGeolocationAndZoom(
-	new harp.GeoCoordinates(39.82, -98.56), 5
+	new harp.GeoCoordinates(1.00, 170.00), 3
 );
 
-let space = 'VdHRsrXD';
+//let space = 'VdHRsrXD';
+let space = 'jn6ACYZk';
+let token = 'ADezeI5rSWu9RGEg39QXkQA';
 const music = new harp.OmvDataSource({
     baseUrl: "https://xyz.api.here.com/hub/spaces/" + space + "/tile/web",
     apiFormat: harp.APIFormat.XYZSpace,
-    authenticationCode: 'AK8NuG-XRNmumBtho_dgbQA',
+    authenticationCode: token,
     gatherFeatureIds:true,
     gatherFeatureAttributes:true
  });
@@ -41,7 +42,7 @@ const music = new harp.OmvDataSource({
         technique: "circles",
         renderOrder: 10000,
         attr: {
-            color: "#7ED321",
+            color: "#FFC0CB",
             size: 30
         }
     }]
@@ -67,7 +68,7 @@ let defaultDiv = document.querySelector('#default');
 <p>
 ${i.userData.Description}
 </p>
-<iframe src="${embed}" width="300" height="300" frameborder="0" allowtransparency="true" allow="encrypted-media"></iframe>
+${i.userData.link}
     `;
     console.log(html);
     //<iframe src="https://open.spotify.com/embed/track/6mcxQ1Y3uQRU0IHsvdNLH1" width="300" height="380" frameborder="0" allowtransparency="true" allow="encrypted-media"></iframe>
