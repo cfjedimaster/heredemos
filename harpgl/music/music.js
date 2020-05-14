@@ -12,7 +12,7 @@ const omvDataSource = new harp.OmvDataSource({
     baseUrl: "https://vector.hereapi.com/v2/vectortiles/base/mc",
     apiFormat: harp.APIFormat.XYZOMV,
     styleSetName: "tilezen",
-    authenticationCode: "c1LJuR0Bl2y02PefaQ2d8PvPnBKEN8KdhAOFYR_Bgmw",
+    authenticationCode: "fQ_k2NOvmptzlxz4aywA87vTsczFDxUcu7JFbzS5xpw",
     authenticationMethod: {
         method: harp.AuthenticationMethod.QueryString,
         name: "apikey"
@@ -25,9 +25,8 @@ map.setCameraGeolocationAndZoom(
 	new harp.GeoCoordinates(1.00, 170.00), 3
 );
 
-//let space = 'VdHRsrXD';
-let space = 'jn6ACYZk';
-let token = 'ADezeI5rSWu9RGEg39QXkQA';
+let space = 'rSc2jACm';
+let token = 'AP9GZ7xdQo-4t5hZLyB6iQA';
 const music = new harp.OmvDataSource({
     baseUrl: "https://xyz.api.here.com/hub/spaces/" + space + "/tile/web",
     apiFormat: harp.APIFormat.XYZSpace,
@@ -54,15 +53,16 @@ const music = new harp.OmvDataSource({
 let info = document.querySelector('#info');
 let defaultDiv = document.querySelector('#default');
 
- canvas.onclick = e => {
+canvas.onclick = e => {
     defaultDiv.style.display = 'block';
     info.style.display = 'none';
     const intersections = map.intersectMapObjects(e.clientX, e.clientY);
-    if(!intersections) return;
+    console.log('clicked, have intersections? '+JSON.stringify(intersections,null, '\t'));
+    if(!intersections || intersections.length === 0) return;
     const i = intersections.find(x => x.hasOwnProperty('userData') && x.userData.$layer === space);
+    console.log('did i have userdata?',i);
     if(!i) return;
     console.log('db', i);
-    let embed = i.userData.link.replace(/\/track/,'/embed/track');
     let html = `
 <h2>${i.userData.Date} - ${i.userData.Name}</h2>
 <p>
@@ -70,8 +70,7 @@ ${i.userData.Description}
 </p>
 ${i.userData.link}
     `;
-    console.log(html);
-    //<iframe src="https://open.spotify.com/embed/track/6mcxQ1Y3uQRU0IHsvdNLH1" width="300" height="380" frameborder="0" allowtransparency="true" allow="encrypted-media"></iframe>
+
     defaultDiv.style.display = 'none';
     info.style.display = 'block';
     info.innerHTML = html;
