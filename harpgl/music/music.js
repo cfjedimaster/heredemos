@@ -4,7 +4,8 @@ const canvas = document.getElementById('map');
 const map = new harp.MapView({
     canvas,
     theme:
-        "https://unpkg.com/@here/harp-map-theme@latest/resources/berlin_tilezen_night_reduced.json"
+        "https://unpkg.com/@here/harp-map-theme@latest/resources/berlin_tilezen_night_reduced.json",
+    tileWrappingEnabled:false
     });
 
 const controls = new harp.MapControls(map);
@@ -57,7 +58,7 @@ canvas.onclick = e => {
     defaultDiv.style.display = 'block';
     info.style.display = 'none';
     const intersections = map.intersectMapObjects(e.clientX, e.clientY);
-    console.log('clicked, have intersections? '+JSON.stringify(intersections,null, '\t'));
+    console.log('clicked, have intersections? '+intersections.length);
     if(!intersections || intersections.length === 0) return;
     const i = intersections.find(x => x.hasOwnProperty('userData') && x.userData.$layer === space);
     console.log('did i have userdata?',i);
