@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>Test</title>
+		<meta name="description" content="">
+		<meta name="viewport" content="initial-scale=1.0, width=device-width" />
+		<script src="https://js.api.here.com/v3/3.1/mapsjs-core.js" type="text/javascript" charset="utf-8"></script>
+		<script src="https://js.api.here.com/v3/3.1/mapsjs-service.js" type="text/javascript" charset="utf-8"></script>
+    	<script src="https://js.api.here.com/v3/3.1/mapsjs-mapevents.js" type="text/javascript" charset="utf-8"></script>
+		<script src="https://js.api.here.com/v3/3.1/mapsjs-ui.js" type="text/javascript" charset="utf-8"></script>
+        <link rel="stylesheet" type="text/css" href="https://js.api.here.com/v3/3.1/mapsjs-ui.css" />
+		<style>
+			#mapContainer {
+				width: 800px;
+				height: 800px;
+			}
+		</style>
+	</head>
+	<body>
+
+		<div id="mapContainer"></div>
+
+		<script>
+		document.addEventListener('DOMContentLoaded', init, false);
+
+		async function init() {
+
+			let position = await getLocation();
+			console.log(position);
+
+			const KEY = 'c1LJuR0Bl2y02PefaQ2d8PvPnBKEN8KdhAOFYR_Bgmw';
+			var platform = new H.service.Platform({
+				'apikey': KEY
+			});
+
+			// Obtain the default map types from the platform object:
+			var defaultLayers = platform.createDefaultLayers();
+
+			var map = new H.Map(
+				document.getElementById('mapContainer'),
+				defaultLayers.vector.normal.map,
+				{
+					zoom: 6,
+					center: { lat: position.latitude, lng: position.longitude },
+					pixelRatio: window.devicePixelRatio || 1
+				}
+			);
+			
+
+			var behavior = new H.mapevents.Behavior(new H.mapevents.MapEvents(map));
+
+			// Create the default UI:
+			var ui = H.ui.UI.createDefault(map, defaultLayers);
+			
+			var icon = new H.map.Icon('park.png');
+
+			let resp = await fetch('./national-parks.geojson');
+			let data = await resp.json();
+			data.features.forEach(f => {
+				let dist = calcCrow(position.latitude, position.longitude, f.geometry.coordinates[1], f.geometry.coordinates[0]); 
+				console.log('dist = '+dist + ' km');
+				if(dist < 500) {
+					map.addObject(new H.map.Marker({lat:f.geometry.coordinates[1], lng:f.geometry.coordinates[0]}, { icon:icon}));
+				}
+			});
+
+		}
+
+		async function getLocation() {
+			return new Promise((resolve, reject) => {
+				navigator.geolocation.getCurrentPosition(pos => {
+					resolve(pos.coords);
+				}, e => {
+					reject(e);
+				});
+			});
+		}
+
+		// credit: https://stackoverflow.com/a/18883819/52160
+		   //This function takes in latitude and longitude of two location and returns the distance between them as the crow flies (in km)
+		function calcCrow(lat1, lon1, lat2, lon2)  {
+			var R = 6371; // km
+			var dLat = toRad(lat2-lat1);
+			var dLon = toRad(lon2-lon1);
+			var lat1 = toRad(lat1);
+			var lat2 = toRad(lat2);
+
+			var a = Math.sin(dLat/2) * Math.sin(dLat/2) +
+				Math.sin(dLon/2) * Math.sin(dLon/2) * Math.cos(lat1) * Math.cos(lat2); 
+			var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a)); 
+			var d = R * c;
+			return d;
+		}
+
+		// Converts numeric degrees to radians
+		function toRad(Value) {
+			return Value * Math.PI / 180;
+		}
+		</script>
+	</body>
+</html>
