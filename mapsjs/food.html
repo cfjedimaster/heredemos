@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>Test</title>
+		<meta name="description" content="">
+		<meta name="viewport" content="initial-scale=1.0, width=device-width" />
+		<script src="https://js.api.here.com/v3/3.1/mapsjs-core.js" type="text/javascript" charset="utf-8"></script>
+		<script src="https://js.api.here.com/v3/3.1/mapsjs-service.js" type="text/javascript" charset="utf-8"></script>
+    	<script src="https://js.api.here.com/v3/3.1/mapsjs-mapevents.js" type="text/javascript" charset="utf-8"></script>
+		<script src="https://js.api.here.com/v3/3.1/mapsjs-ui.js" type="text/javascript" charset="utf-8"></script>
+        <link rel="stylesheet" type="text/css" href="https://js.api.here.com/v3/3.1/mapsjs-ui.css" />
+		<style>
+		body,html {
+			margin: 0;
+			padding: 0;
+			font-family: Arial, Helvetica, sans-serif;
+		}
+		#mapContainer {
+			width: 100vw; 
+			height: 100vh; 
+			position: absolute;
+		}
+
+		#sidebar {
+			position: absolute;
+			z-index: 5000;
+			width: 300px;
+			overflow-y: auto;
+			background-color: aqua;
+			margin: 20px;
+			padding: 10px;
+			height: 400px;
+		}
+
+		</style>
+	</head>
+	<body>
+
+		<div id="mapContainer"></div>
+		<div id="sidebar">
+		<h2>Food Explorer</h2>
+		
+		<div id="instructions">
+		<p>Click on the map to get a report on the food types most prevalent at restaurants in that area.</p>
+		</div>
+
+		<div id="result"></div>
+
+		</div>
+
+		<script src="food.js"></script>
+	</body>
+</html>
