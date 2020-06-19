@@ -87,7 +87,8 @@ async function getRestaurants(coords) {
 		searchService.browse({
 			at: `${coords.lat},${coords.lng}`,
 			limit: 100,
-			categories: '100-1000-0000'
+			categories: '100-1000-0000',
+			lang:'en-US'
 		}, results => {
 			let restaurants = results.items.map(m => {
 				let open = '';
