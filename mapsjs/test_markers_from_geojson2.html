@@ -60,7 +60,20 @@
 				map.addObject(new H.map.Marker({lat:f.geometry.coordinates[1], lng:f.geometry.coordinates[0]}, { icon:icon}));
 			});
 			*/
-			let reader = new H.data.geojson.Reader('./national-parks.geojson');
+
+			var icon = new H.map.Icon('park.png');
+
+			
+			//let reader = new H.data.geojson.Reader('./national-parks.geojson');
+			let reader = new H.data.geojson.Reader('./national-parks.geojson', {
+				style(mapObject) {
+					//console.dir(mapObject);
+					if(mapObject instanceof H.map.Marker) {
+						mapObject.setIcon(icon);
+					}
+				}, disableLegacyMode: true
+			});
+		
 			reader.parse();
 			map.addLayer(reader.getLayer());
 
