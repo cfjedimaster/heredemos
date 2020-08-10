@@ -19,6 +19,7 @@ body {
 .info {
 	font-style: italic;
 }
+
 </style>
 </head>
 
@@ -71,7 +72,7 @@ body {
 				<strong>Tile Request Level:</strong> {{ detail.tileRequestsLevel }}
 				</p>
 
-				<table class="table">
+				<table class="table table-dark table-striped table-bordered">
 					<thead>
 						<tr>
 							<th scope="col">Name</th>
@@ -81,7 +82,7 @@ body {
 					<tbody>
 						<tr v-for="attr in detail.attributes">
 							<td>{{ attr.name }}</td>
-							<td>{{ attr.desc }}</td>
+							<td><span v-html="attr.desc" class="text-break"></span></td>
 						</tr>
 					</tbody>
 				</table>
