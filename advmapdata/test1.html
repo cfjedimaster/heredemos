@@ -1,0 +1,178 @@
+<html>
+
+<head>
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
+<style>
+body {
+	margin-top: 30px;
+	background-color: #00afaa;
+}
+
+#app {
+	background-color: white;
+}
+
+.list-group-item-action {
+	cursor: pointer;
+}
+
+.info {
+	font-style: italic;
+}
+</style>
+</head>
+
+<body>
+
+<div id="app" class="container">
+	<div class="row">
+		<div class="col-4">
+			<h2>Filters</h2>
+			<form>
+				<div class="form-group">
+					<div class="custom-control custom-checkbox">
+						<input type="checkbox" class="custom-control-input" id="typeAttr" value="true" v-model="attrEnabled">
+						<label class="custom-control-label" for="typeAttr">Show ATTR</label>
+					</div>
+					<div class="custom-control custom-checkbox">
+						<input type="checkbox" class="custom-control-input" id="typeGeom" value="true" v-model="geomEnabled">
+						<label class="custom-control-label" for="typeGeom">Show GEOM</label>
+					</div>
+				</div>
+				<div class="form-group">
+					<input type="search" class="form-control" placeholder="Type to filter by name" v-model="nameFilter">
+				</div>
+			</form>
+
+			<div v-if="listLoading" class="info"><p>Loading layers...</p></div>
+			<div class="list-group">
+				<a class="list-group-item list-group-item-action" v-for="layer in layers" @click="loadLayer(layer.name,layer.type)">{{ layer.name }} ({{layer.type}})</a>
+			</div>
+		</div>
+
+		<div class="col-8">
+			<h2>Details</h2>
+			<div v-if="detailLoading" class="info"><p>Loading layer...</p></div>
+
+			<div v-if="detail">
+				<p>
+				<strong>Name:</strong> {{ selectedName }} ({{ selectedType }})
+				</p>
+				<p>
+				<strong>Description:</strong><br/> {{ detail.description }}
+				</p>
+				<p>
+				<strong>Is Static:</strong> {{ detail.isStaticContent }}
+				</p>
+				<p>
+				<strong>Tile X/Y:</strong> {{ detail.tileX }}/{{ detail.tileY }}
+				</p>
+				<p>
+				<strong>Tile Request Level:</strong> {{ detail.tileRequestsLevel }}
+				</p>
+
+				<table class="table">
+					<thead>
+						<tr>
+							<th scope="col">Name</th>
+							<th scope="col">Description</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr v-for="attr in detail.attributes">
+							<td>{{ attr.name }}</td>
+							<td>{{ attr.desc }}</td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+		</div>
+	</div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+<script>
+const KEY = 'c1LJuR0Bl2y02PefaQ2d8PvPnBKEN8KdhAOFYR_Bgmw';
+
+const app = new Vue({
+	el:'#app',
+	data: {
+		rawLayers:null,
+		attrEnabled:true,
+		geomEnabled:true,
+		nameFilter:'',
+		detail:null,
+		listLoading:false,
+		detailLoading:false,
+		selectedName:'',
+		selectedType:''
+	},
+	async created() {
+		this.listLoading = true;
+		this.rawLayers = await getLayers();
+		this.listLoading = false;
+	},
+	methods: {
+		async loadLayer(name,type) {
+			this.detail = null;
+			this.detailLoading = true;
+			let result = await getLayer(name);
+			console.log(result);
+			/*
+			rewrite attributes to be an array
+			*/
+			let keys = Object.keys(result.attributes);
+			let attrArray = [];
+			for(let i=0;i<keys.length;i++) {
+				let key = keys[i];
+				attrArray.push({ name: key, desc: result.attributes[key] });
+			}
+			attrArray.sort((a,b) => {
+				if(a.name < b.name) return -1;
+				if(a.name > b.name) return 1;
+				return 0;
+			});
+
+			result.attributes = attrArray;
+			this.detailLoading = false;
+			this.selectedName = name;
+			this.selectedType = type;
+			this.detail = result;
+		}
+	},
+	computed: {
+		layers() {
+			if(!this.rawLayers) return [];
+			return this.rawLayers.filter(l => {
+				if(!this.attrEnabled && l.type === 'attr') return false;
+				if(!this.geomEnabled && l.type === 'geom') return false;
+				if(this.nameFilter !== '') return l.name.toLowerCase().indexOf(this.nameFilter.toLowerCase()) >= 0;
+				return true;
+			});
+		}
+	}
+});
+
+async function getLayers() {
+	let resp = await fetch(`https://s.fleet.ls.hereapi.com/1/doc/layers.json?apiKey=${KEY}`);
+	let data = await resp.json();
+	//console.log(data);
+	return data;
+}
+
+const layerCache = {};
+async function getLayer(name) {
+	/*
+	quick and simple cache, in theory bad if the user clicks on EVERY layer, but ram is cheap!
+	*/
+	if(layerCache[name]) return layerCache[name];
+	let resp = await fetch(`https://s.fleet.ls.hereapi.com/1/doc/layer.json?layer=${encodeURIComponent(name)}&apiKey=${KEY}`);
+	let data = await resp.json();
+	layerCache[name] = data;
+	return data;
+
+}
+
+</script>
+</body>
+</html>
