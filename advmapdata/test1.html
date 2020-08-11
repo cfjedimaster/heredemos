@@ -60,7 +60,7 @@ body {
 				<strong>Name:</strong> {{ selectedName }} ({{ selectedType }})
 				</p>
 				<p>
-				<strong>Description:</strong><br/> {{ detail.description }}
+				<strong>Description:</strong><br/> <span v-html="detail.description"></span>
 				</p>
 				<p>
 				<strong>Is Static:</strong> {{ detail.isStaticContent }}
