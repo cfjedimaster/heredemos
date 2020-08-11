@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>Admin Poly</title>
+        <!-- SCRIPTS -->
+        <meta name="viewport" charset="UTF-8" content="initial-scale=1.0, width=device-width" />
+        <script type="text/javascript" src="https://js.api.here.com/v3/3.1/mapsjs-core.js"></script>
+        <script type="text/javascript" src="https://js.api.here.com/v3/3.1/mapsjs-service.js"></script>
+        <script type="text/javascript" src="https://js.api.here.com/v3/3.1/mapsjs-ui.js"></script>
+        <script type="text/javascript" src="https://js.api.here.com/v3/3.1/mapsjs-mapevents.js"></script>
+        <link rel="stylesheet" type="text/css" href="https://js.api.here.com/v3/3.1/mapsjs-ui.css"/> 
+    </head>
+    <body>
+        <div id="map" style="width: 100vw; height: 100vh; background: #39B6B3;" ></div> 
+        <script>
+       		const KEY = 'c1LJuR0Bl2y02PefaQ2d8PvPnBKEN8KdhAOFYR_Bgmw';
+
+            var platform = new H.service.Platform({
+                apikey: KEY
+            });
+
+            // Obtain the default map types from the platform object:
+
+            var defaultLayers = platform.createDefaultLayers();
+            var myPos = {lat: 52.53007, lng: 13.38526};
+
+            // Instantiate (and display) a map object:
+
+            var map = new H.Map(
+                document.getElementById('map'),
+                defaultLayers.vector.normal.map,
+                {
+                    zoom: 13,
+                    center: myPos
+                });
+
+            var ui = H.ui.UI.createDefault(map, defaultLayers);
+
+            var mapEvents = new H.mapevents.MapEvents(map);
+
+            var behavior = new H.mapevents.Behavior(mapEvents);
+
+            var service = platform.getPlatformDataService();
+
+
+            // Create a style object:
+            var customStyle = {
+            strokeColor: 'black',
+            fillColor: 'rgba(255, 255, 255, 0.5)',
+            lineWidth: 3,
+            lineCap: 'square',
+            lineJoin: 'bevel'
+            };
+
+
+            var level = 10;
+            var tileX =Math.floor((myPos.lng + 180.0) / (180 / Math.pow(2,level)));
+
+            var tileY =Math.floor((myPos.lat + 90.0) / (180 / Math.pow(2,level)));
+            console.log(tileX,tileY);
+
+
+            var url = `https://s.fleet.ls.hereapi.com/1/tile.json?`+
+            `apiKey=${KEY}`+
+            `&layer=ADMIN_POLY_8`+
+            `&level=${level}`+
+            `&tilex=${tileX}`+
+            `&tiley=${tileY}`;
+
+
+            fetch(url)
+            .then(result => result.json())
+            .then(result => {
+                console.log(result);
+
+                // var separators = ['GERBN','GERY','\u001e','\u001d'];
+                
+                // result.Rows.forEach(roads => {
+                // // console.log(JSON.stringify(roads.NAMES));
+                // let names = roads.NAMES.split(new RegExp(separators.join('|'),'g'));
+                // console.log(names[1] );
+                    
+                // });
+            })
+            .catch(error =>{
+                console.error(error);
+            })
+
+        </script>
+    </body>
+</html>
