@@ -7,7 +7,6 @@ const ACCESS_TOKEN = process.env.ACCESS_TOKEN;
 
 const SPACE_ID = 'ylfzY538';
 
-// Example of a specific breed search
 fetch(`https://xyz.api.here.com/hub/spaces/${SPACE_ID}/spatial?access_token=${ACCESS_TOKEN}&lat=30.22478&lon=-92.02402&radius=300000`)
 .then(res => {
 	return res.json();

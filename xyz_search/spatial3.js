@@ -1,5 +1,3 @@
-
-
 require('dotenv').config();
 
 const fetch = require('node-fetch');
@@ -7,7 +5,10 @@ const ACCESS_TOKEN = process.env.ACCESS_TOKEN;
 
 const SPACE_ID = 'ylfzY538';
 
-fetch(`https://xyz.api.here.com/hub/spaces/${SPACE_ID}/bbox?access_token=${ACCESS_TOKEN}&west=-94.24928&north=32.82697&east=-90.11567&south=29.9372`)
+const NOLA_SPACE = '4N1J3TtN';
+const NOLA_FEATURE = 'wSxVVnDD1YLcNCHa';
+
+fetch(`https://xyz.api.here.com/hub/spaces/${SPACE_ID}/spatial?access_token=${ACCESS_TOKEN}&refSpaceId=${NOLA_SPACE}&refFeatureId=${NOLA_FEATURE}&radius=3000`)
 .then(res => {
 	return res.json();
 })
