@@ -90,8 +90,18 @@ async function doShowRoute() {
         return: 'polyline,turnByTurnActions,actions,instructions,travelSummary'
     };
 
+
+	for(let i=0;i<waypoints.length;i++) {
+		if(!routeRequestParams.via) routeRequestParams.via = [];
+		let value = waypoints[i].pos.lat+','+waypoints[i].pos.lng;
+		routeRequestParams.via.push(value);
+	}
+	
+	//routeRequestParams.via = ['36.17,-115.14','47.60537,-122.32945'];
+
+	console.log(routeRequestParams);
 	let route = await getRoute(routeRequestParams);
-	//console.log(route);
+	console.log(route);
 	addRouteShapeToMap(route);
 	addRouteText(route);
 }
@@ -112,16 +122,19 @@ async function geocode(s) {
 	});
 }
 
-async function getRoute(p) {
-	return new Promise((resolve, reject) => {
+async function getRoute(p) { 
 
-		router.calculateRoute(
-			p,
-			r => resolve(r.routes[0]),
-			e => reject(e)
-		);
+		let url = `https://router.hereapi.com/v8/routes?origin=${p.origin}&transportMode=${p.transportMode}&routingMode=${p.routingMode}&destination=${p.destination}&apikey=${KEY}&return=${p.return}`;
+		if(p.via) {
+			p.via.forEach(v => {
+				url += '&via='+v;
+			});
+		}
+		console.log(url);
+		let resp = await fetch(url);
+		let data = await resp.json();
+		return data.routes[0];
 
-	});
 }
 
 function addRouteShapeToMap(route) {
