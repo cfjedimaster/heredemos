@@ -6,10 +6,11 @@ I used some of the rendering functions from here!
 const KEY = 'c1LJuR0Bl2y02PefaQ2d8PvPnBKEN8KdhAOFYR_Bgmw';
 
 document.addEventListener('DOMContentLoaded', init, false);
-let showRouteButton, startField, endField, directionsDiv;
+let showRouteButton, startField, endField, directionsDiv, addWaypointButton, newWaypoint, waypointList;
 
 let map, platform, router, geocoder;
 
+let waypoints = [];
 
 function init() {
 	platform = new H.service.Platform({
@@ -43,11 +44,19 @@ function init() {
 
 	startField = document.querySelector('#start');
 	endField = document.querySelector('#end');
+
+	directionsDiv = document.querySelector('#directionsText');
+
+	addWaypointButton = document.querySelector('#addWaypointButton');
+	addWaypointButton.addEventListener('click', addWaypoint);
+	newWaypoint = document.querySelector('#newWaypoint');
+
+	waypointList = document.querySelector('#waypointList');
+
 	// temp for testing
 	startField.value = 'Lafayette, LA, USA';
 	endField.value = 'Chicago, Il, USA';
-
-	directionsDiv = document.querySelector('#directionsText');
+	newWaypoint.value = 'Las Vegas, NV';
 
 }
 
@@ -149,5 +158,30 @@ function addRouteText(route) {
 	});
 	desc += '</ol>';
 	directionsDiv.innerHTML = desc;
+
+}
+
+async function addWaypoint() {
+	let wp = newWaypoint.value;
+	if(!wp) {
+		alert('Enter a location in the waypoint field');
+		return;
+	}
+
+	let pos = await geocode(wp);
+	waypoints.push({label:wp, pos});
+	renderWaypoints();
+	newWaypoint.value = '';
+	console.log(pos);
+}
+
+function renderWaypoints() {
+	let s = '<ul>';
+	waypoints.forEach(wp => {
+		s += `<li>${wp.label}</li>`;
+	});
+	s += '</ul>';
+
+	waypointList.innerHTML = s;
 
 }
