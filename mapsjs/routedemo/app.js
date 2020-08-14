@@ -53,6 +53,7 @@ function init() {
 
 async function doShowRoute() {
 	console.log('do the route thing');
+
 	let start = startField.value;
 	let end = endField.value;
 
@@ -65,6 +66,8 @@ async function doShowRoute() {
 		alert('Specify a end location.');
 		return;
 	}
+
+	directionsDiv.innerHTML = '<p><i>Please stand by, doing awesome stuff...</i></p>';
 
 	let originPos = await geocode(start);
 	let endPos = await geocode(end);
@@ -79,7 +82,7 @@ async function doShowRoute() {
     };
 
 	let route = await getRoute(routeRequestParams);
-	console.log(route);
+	//console.log(route);
 	addRouteShapeToMap(route);
 	addRouteText(route);
 }
