@@ -174,11 +174,19 @@ function mapClick(evt) {
 	let lat = coord.lat.toFixed(4);
 	let lng = coord.lng.toFixed(4);
 
-	if(evt.currentTarget instanceof H.map.Marker) {
+	if(evt.target instanceof H.map.Marker) {
 		console.log('MARKER');
-	}
-	console.log(lat, lng);
-	map.addObject(new H.map.Marker({lat, lng}));
+		let mPos = evt.target.getGeometry();
+		map.removeObject(evt.target);
+		waypoints = waypoints.filter(w => {
+			//double equals is on purpose
+			if(w.lat == mPos.lat && w.lng == mPos.lng) return false;
+			return true;
+		});
+	} else {
+		let marker = new H.map.Marker({lat,lng});
+		map.addObject(marker);
 
-	waypoints.push({ lat, lng });
+		waypoints.push({ lat, lng });
+	}
 }
