@@ -190,11 +190,20 @@ async function addWaypoint() {
 
 function renderWaypoints() {
 	let s = '<ul>';
-	waypoints.forEach(wp => {
-		s += `<li>${wp.label}</li>`;
+	waypoints.forEach((wp,x) => {
+		s += `<li onclick='removeWp(${x})' class='waypointItem' title='Click to remove'>${wp.label}</li>`;
 	});
 	s += '</ul>';
 
 	waypointList.innerHTML = s;
 
+}
+
+function removeWp(idx) {
+	console.log('remove '+idx);
+	for(let x=waypoints.length-1;x>=0;x--) {
+		console.log(x,idx);
+		if(x === idx) waypoints.splice(idx,1);
+	}
+	renderWaypoints();
 }
