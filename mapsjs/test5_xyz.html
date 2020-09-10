@@ -33,6 +33,7 @@ Swiched to a copy of test_markers_from_geojson
 		const icon = new H.map.Icon('park.png');
 		const ACCESS_TOKEN = 'AAawblYJRUyKlai3mp9XcQA';
 		const SPACE_ID = 'ylfzY538';
+		const RADIUS = 300000;
 
 		let group = new H.map.Group();
 
@@ -74,9 +75,15 @@ Swiched to a copy of test_markers_from_geojson
 
 		}
 
-		async function loadParksNearX(lat,lon) {
+		async function loadParksNearX(lat,lng) {
 			group.removeAll();
-			let url = `https://xyz.api.here.com/hub/spaces/${SPACE_ID}/spatial?access_token=${ACCESS_TOKEN}&lat=${lat}&lon=${lon}&radius=300000`;
+
+			let circle = new H.map.Circle({lat, lng}, RADIUS);
+
+			// Add the circle to the map:
+			group.addObject(circle);
+
+			let url = `https://xyz.api.here.com/hub/spaces/${SPACE_ID}/spatial?access_token=${ACCESS_TOKEN}&lat=${lat}&lon=${lng}&radius=${RADIUS}`;
 
 			let resp = await fetch(url);
 			let data = await resp.json();
