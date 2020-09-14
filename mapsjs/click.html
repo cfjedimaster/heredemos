@@ -2,7 +2,7 @@
 <html>
 	<head>
 		<meta charset="utf-8">
-		<title>Test XYZ</title>
+		<title>Click for long/lat and address</title>
 		<meta name="description" content="">
 		<meta name="viewport" content="initial-scale=1.0, width=device-width" />
 		<script src="https://js.api.here.com/v3/3.1/mapsjs-core.js" type="text/javascript" charset="utf-8"></script>
@@ -14,9 +14,17 @@
         <link rel="stylesheet" type="text/css"
             href="https://js.api.here.com/v3/3.1/mapsjs-ui.css" />
 		<style>
+			body {
+				margin: 0;
+			}
+
 			#mapContainer {
-				width: 800px;
-				height: 800px;
+				width: 100vw;
+				height: 90vh;
+			}
+
+			#result {
+				font-family: Arial, Helvetica, sans-serif;
 			}
 		</style>
 	</head>
@@ -61,7 +69,7 @@
 				evt.currentPointer.viewportY);
 			let lat = coord.lat.toFixed(4);
 			let lng = coord.lng.toFixed(4);
-			let html = `Clicked at lat/lng ${lat}, ${lng}`;
+			let html = `Clicked at lat/lng <strong>${lat}, ${lng}</strong>`;
 
 
 			var reverseGeocodingParameters = {
@@ -73,9 +81,12 @@
 			geocoder.reverseGeocode(
 				reverseGeocodingParameters,
 				e => {
-					let result = e.Response.View[0].Result[0];
-					let address = result.Location.Address.Label;
-					resultDiv.innerHTML = `${html}<br/>${address}`;
+					if(e.Response.View.length > 0) {
+						let result = e.Response.View[0].Result[0];
+						let address = result.Location.Address.Label;
+						html += `<br>${address}`;
+					}
+					resultDiv.innerHTML = html;
 				},
 				function(e) { alert(e); }
 			);
