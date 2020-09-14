@@ -4,8 +4,7 @@ const canvas = document.getElementById('map');
 const map = new harp.MapView({
     canvas,
     theme:
-        "https://unpkg.com/@here/harp-map-theme@latest/resources/berlin_tilezen_night_reduced.json",
-    tileWrappingEnabled:false
+        "https://unpkg.com/@here/harp-map-theme@latest/resources/berlin_tilezen_night_reduced.json"
     });
 
 const controls = new harp.MapControls(map);
