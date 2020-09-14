@@ -1,3 +1,7 @@
+<!--
+Loads a space of parks and has popup displays for them. Unlike test4_xyz.html, this
+one has the image data already so there's no need for a second call.
+-->
 <!DOCTYPE html>
 <html>
 	<head>
@@ -20,7 +24,7 @@
 			height: 100vh;
 		}
 
-		#npsResult img {
+		img.park {
 			max-width: 300px;
 			max-height: 300px;
 		}
@@ -54,12 +58,12 @@
 		// Create the default UI:
     	var ui = H.ui.UI.createDefault(map, defaultLayers);
 
-		const XYZ_TOKEN = 'AFJj375eSbmD0w3reC4aGQA';
+		const XYZ_TOKEN = 'AHDIOVe6R6y1ry3kSAjeRQA';
 		const service = platform.getXYZService({
 			token: XYZ_TOKEN,
 		});
 
-		const XYZ_SPACE = '73KBVoD8';
+		const XYZ_SPACE = 'yi9C54LG';
 		const mySpaceProvider = new H.service.xyz.Provider(service, XYZ_SPACE, {
 		});
 		
@@ -81,31 +85,15 @@
 			}
 			bubble.setContent(`
 			<div style="height:320px; overflow:auto;width: 320px;">
-			<h2>${data.properties['properties.Name']}</h2>
-				<div id="npsResult">
-				</div>
+			<h2>${data.properties['properties.name']}</h2>
+			<p>${data.properties['properties.description']}</p>
+			<img class="park" src="${data.properties['properties.image']}" title="Photo of Park">
 			</div>`);
 
 			bubble.setPosition(position);
 			bubble.open();
-			loadNPS(data.properties['properties.Code']);
 			map.setCenter(position, true);	
 		});
-
-		async function loadNPS(code) {
-			let resp = await fetch(`https://developer.nps.gov/api/v1/parks?api_key=O004B1Pwy8nCfqSSJcaTdMJzJvwltNEFtFwO72oP&parkCode=${code}`);
-			let data = await resp.json();
-			if(data.total && data.total === "1") {
-				let park = data.data[0];
-				console.log(park);
-				if(park.images && park.images.length > 0) {
-					document.querySelector('#npsResult').innerHTML = `
-<img src="${park.images[0].url}" alt="${park.images[0].altText}" title="${park.images[0].title}">					
-					`;
-				}
-			}
-		}
-
 		</script>
 	</body>
 </html>

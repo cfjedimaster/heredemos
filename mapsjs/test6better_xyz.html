@@ -1,3 +1,7 @@
+<!--
+Loads a space of parks and has popup displays for them. Unlike test4_xyz.html, this
+one has the image data already so there's no need for a second call.
+-->
 <!DOCTYPE html>
 <html>
 	<head>
@@ -20,7 +24,7 @@
 			height: 100vh;
 		}
 
-		#npsResult img {
+		img.park {
 			max-width: 300px;
 			max-height: 300px;
 		}
@@ -31,6 +35,8 @@
 		<div id="mapContainer"></div>
 
 		<script>
+		const CAMP_STORE = '600-6900-0395';
+
 		const KEY = 'c1LJuR0Bl2y02PefaQ2d8PvPnBKEN8KdhAOFYR_Bgmw';
 		var platform = new H.service.Platform({
 			'apikey': KEY
@@ -54,12 +60,12 @@
 		// Create the default UI:
     	var ui = H.ui.UI.createDefault(map, defaultLayers);
 
-		const XYZ_TOKEN = 'AFJj375eSbmD0w3reC4aGQA';
+		const XYZ_TOKEN = 'AHDIOVe6R6y1ry3kSAjeRQA';
 		const service = platform.getXYZService({
 			token: XYZ_TOKEN,
 		});
 
-		const XYZ_SPACE = '73KBVoD8';
+		const XYZ_SPACE = 'yi9C54LG';
 		const mySpaceProvider = new H.service.xyz.Provider(service, XYZ_SPACE, {
 		});
 		
@@ -71,7 +77,7 @@
 
 		let bubble;
 		// Add 'tap' event listener, that opens info bubble
-		mySpaceProvider.addEventListener('tap', function (evt) {
+		mySpaceProvider.addEventListener('tap', async evt => {
 			let position = map.screenToGeo(evt.currentPointer.viewportX, evt.currentPointer.viewportY),
 				data = evt.target.getData();
 				
@@ -81,29 +87,38 @@
 			}
 			bubble.setContent(`
 			<div style="height:320px; overflow:auto;width: 320px;">
-			<h2>${data.properties['properties.Name']}</h2>
-				<div id="npsResult">
-				</div>
+			<h2>${data.properties['properties.name']}</h2>
+			<p>${data.properties['properties.description']}</p>
+			<img class="park" src="${data.properties['properties.image']}" title="Photo of Park">
+			<div id="storeInfo"></div>
 			</div>`);
 
 			bubble.setPosition(position);
 			bubble.open();
-			loadNPS(data.properties['properties.Code']);
-			map.setCenter(position, true);	
+			map.setCenter(position, true);
+			let stores = await loadStoreInfo(position);
+			let storeHTML = `
+<h2>Nearby Camping Stores</h2>
+			`;
+			if(stores.length > 0) {
+				storeHTML += '<ul>';
+				stores.forEach(s => {
+					storeHTML += `<li>${s.title} at ${s.address.label}</li>`;
+				});
+				storeHTML += '</ul>';
+			} else {
+				storeHTML += 'Unfortunately, there are no camping stores nearby.';
+			}
+			document.querySelector('#storeInfo').innerHTML = storeHTML;
+			
+			console.log(stores);
 		});
 
-		async function loadNPS(code) {
-			let resp = await fetch(`https://developer.nps.gov/api/v1/parks?api_key=O004B1Pwy8nCfqSSJcaTdMJzJvwltNEFtFwO72oP&parkCode=${code}`);
+		async function loadStoreInfo(pos) {
+			let url = `https://browse.search.hereapi.com/v1/browse?apiKey=${KEY}&at=${pos.lat},${pos.lng}&categories=${CAMP_STORE}&limit=10`;
+			let resp = await fetch(url);
 			let data = await resp.json();
-			if(data.total && data.total === "1") {
-				let park = data.data[0];
-				console.log(park);
-				if(park.images && park.images.length > 0) {
-					document.querySelector('#npsResult').innerHTML = `
-<img src="${park.images[0].url}" alt="${park.images[0].altText}" title="${park.images[0].title}">					
-					`;
-				}
-			}
+			return data.items;
 		}
 
 		</script>
