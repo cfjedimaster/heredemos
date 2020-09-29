@@ -2,6 +2,8 @@ import Vue from 'vue'
 import VueRouter from 'vue-router'
 import Home from '../views/Home.vue'
 
+import store from '../store/index';
+
 Vue.use(VueRouter)
 
 const routes = [
@@ -16,8 +18,25 @@ const routes = [
     // route level code-splitting
     // this generates a separate chunk (about.[hash].js) for this route
     // which is lazy-loaded when the route is visited.
-    component: () => import(/* webpackChunkName: "about" */ '../views/SpaceList.vue')
+    component: () => import(/* webpackChunkName: "about" */ '../views/SpaceList.vue'),
+    beforeEnter:(to, from, next) => {
+      if(store.state.token) next();
+      else next({name:'Home'});
+    }
+  },
+  {
+    path: '/space',
+    name: 'Space',
+    // route level code-splitting
+    // this generates a separate chunk (about.[hash].js) for this route
+    // which is lazy-loaded when the route is visited.
+    component: () => import(/* webpackChunkName: "about" */ '../views/Space.vue'),
+    beforeEnter:(to, from, next) => {
+      if(store.state.token) next();
+      else next({name:'Home'});
+    }
   }
+
 ]
 
 const router = new VueRouter({

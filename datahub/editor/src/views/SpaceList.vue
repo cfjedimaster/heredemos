@@ -39,8 +39,9 @@ export default {
     }
   },
   methods: {
-    selectSpace(s) {
-      console.log('click on '+s.title);
+    selectSpace(space) {
+      console.log('click on '+space.title);
+      this.$router.push({name:'Space', params: {space}});
     }
   }
 }

@@ -5,6 +5,7 @@
       color="primary"
       dark
     >
+      <v-btn icon to="/"><v-icon>mdi-home</v-icon></v-btn>
       <v-toolbar-title>Space Editor</v-toolbar-title>
     </v-app-bar>
 

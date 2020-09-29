@@ -8,7 +8,8 @@ Vue.use(Vuex)
 export default new Vuex.Store({
   state: {
     token:null,
-    spaces:null
+    spaces:[],
+    features:null
   },
   getters: {
     accessToken(state) {
@@ -18,15 +19,24 @@ export default new Vuex.Store({
     }
   },
   mutations: {
-  },
-  actions: {
-    setAccessToken(context, token) {
-      context.token = token;
+    setAccessToken(state, token) {
+      state.token = token;
       localStorage.setItem('token', token);
     },
+    setFeatures(state, features) {
+      state.features = features;
+    },
+    setSpaces(state, space) {
+      state.spaces = space;
+    }
+  },
+  actions: {
+    async loadSpace(context, params) {
+      console.log('loadSpace', params);
+      context.commit('setFeatures', await datahub.loadSpace(params.space.id, context.state.token));
+    },
     async loadSpaces(context) {
-    console.log(context.state);
-      context.state.spaces = await datahub.loadSpaces(context.state.token);
+      context.commit('setSpaces', await datahub.loadSpaces(context.state.token));
     }
   },
   modules: {

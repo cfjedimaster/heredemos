@@ -57,7 +57,7 @@ export default {
   methods: {
     setToken() {
       if(this.access_token === '') return;
-      this.$store.dispatch('setAccessToken', this.access_token);
+      this.$store.commit('setAccessToken', this.access_token);
       this.$router.push('spaceList');
     }
   }
