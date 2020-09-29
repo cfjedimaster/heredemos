@@ -1,0 +1,111 @@
+{
+  "type": "FeatureCollection",
+  "etag": "b267189dc28d691e14ca822317d030f9",
+  "features": [
+    {
+      "id": "74d98e31-313c-4eb1-a59f-8e185286f50a",
+      "type": "Feature",
+      "properties": {
+        "mood": "sad",
+        "name": "Martha",
+        "gender": "Female",
+        "@ns:com:here:xyz": {
+          "tags": [
+            "seed"
+          ],
+          "space": "R573F24U",
+          "createdAt": 1600710476641,
+          "updatedAt": 1600710476641
+        },
+        "@ns:com:here:xyz:log": {
+          "id": "acc709ec141df7f6be4020cf599001b7",
+          "action": "SAVE",
+          "original": {
+            "space": "QUrgUIm1",
+            "createdAt": 1600710476541,
+            "updatedAt": 1600710476541
+          },
+          "invalidatedAt": 9223372036854776000
+        }
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -92.7298,
+          30.7373,
+          0
+        ]
+      }
+    },
+    {
+      "id": "eb8616e9-03ba-40eb-b38f-1c36a905a428",
+      "type": "Feature",
+      "properties": {
+        "mood": "angry",
+        "name": "Zelda",
+        "gender": "Female",
+        "@ns:com:here:xyz": {
+          "tags": [
+            "seed"
+          ],
+          "space": "R573F24U",
+          "createdAt": 1600710476641,
+          "updatedAt": 1600710476641
+        },
+        "@ns:com:here:xyz:log": {
+          "id": "d722f50f54d20a0f336a0d7eac914096",
+          "action": "SAVE",
+          "original": {
+            "space": "QUrgUIm1",
+            "createdAt": 1600710476541,
+            "updatedAt": 1600710476541
+          },
+          "invalidatedAt": 9223372036854776000
+        }
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -91.1473,
+          30.4711,
+          0
+        ]
+      }
+    },
+    {
+      "id": "0fe0cc7c-738d-4548-af25-21da2218f02d",
+      "type": "Feature",
+      "properties": {
+        "mood": "happy",
+        "name": "Fred",
+        "gender": "Male",
+        "@ns:com:here:xyz": {
+          "tags": [
+            "seed"
+          ],
+          "space": "R573F24U",
+          "createdAt": 1600710476641,
+          "updatedAt": 1600710476641
+        },
+        "@ns:com:here:xyz:log": {
+          "id": "5275bd4ef1b010a2ece650e6ac2dd72a",
+          "action": "SAVE",
+          "original": {
+            "space": "QUrgUIm1",
+            "createdAt": 1600710476541,
+            "updatedAt": 1600710476541
+          },
+          "invalidatedAt": 9223372036854776000
+        }
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -90.0715,
+          29.951,
+          0
+        ]
+      }
+    }
+  ]
+}

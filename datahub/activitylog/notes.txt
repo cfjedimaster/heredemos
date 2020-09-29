@@ -1,0 +1,23 @@
+This demo will help show how the activity log works. My space will consist of 5 cats with properties:
+
+name
+gender
+mood
+
+How to make the space:
+
+I used this: https://xyz.api.here.com/token-ui/spacemgmt.html
+
+Main space: QUrgUIm1
+AL space: R573F24U
+
+
+The script I will write will do this each execution:
+
+get all cats
+randomly change mood
+randomly (possibly) move them +- a few points of lat/lng
+
+
+LOG:
+output1.geojson, output of AL space after seeding Main space with seed.geojson
