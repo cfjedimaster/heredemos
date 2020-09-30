@@ -88,7 +88,6 @@ Swiched to a copy of test_markers_from_geojson
 			let resp = await fetch(url);
 			let data = await resp.json();
 			data.features.forEach(f => {
-				//map.addObject(new H.map.Marker({lat:f.geometry.coordinates[1], lng:f.geometry.coordinates[0]}, { icon:icon}));
 				group.addObject(new H.map.Marker({lat:f.geometry.coordinates[1], lng:f.geometry.coordinates[0]}, { icon:icon}));				
 			});
 		}
