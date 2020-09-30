@@ -24,6 +24,11 @@ export default new Vuex.Store({
       localStorage.setItem('token', token);
     },
     setFeatures(state, features) {
+      // moved the jsonprint stuff here
+      features.forEach(f => {
+        f.properties = JSON.stringify(f.properties, '', '\t');
+        f.geometry = JSON.stringify(f.geometry, '', '\t');
+      });
       state.features = features;
     },
     setSpaces(state, space) {

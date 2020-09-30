@@ -15,9 +15,7 @@ export default {
 		height: { default: 500 }
 	},
 	created() {
-		console.log('wtf', this.geometry);
-		console.log(this.geometry);
-		this.imgSrc = this.featureToMap(this.geometry, key, this.width, this.height);
+		this.imgSrc = this.featureToMap(JSON.parse(this.geometry), key, this.width, this.height);
 		console.log('done', this.imgSrc);
 	},
 	data: () => ({
