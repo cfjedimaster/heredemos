@@ -24,11 +24,29 @@ export default new Vuex.Store({
       localStorage.setItem('token', token);
     },
     saveFeature(state, f) {
+      console.log('saveFeature', {...f.properties});
+      let features = [...state.features];
+      for(let i=0;i<features.length;i++) {
+        if(features[i].id === f.id) {
+          f.properties = JSON.stringify(f.properties, '', '\t');
+          f.geometry = JSON.stringify(f.geometry, '', '\t');
+          features[i] = {...f};
+          console.log('fuc me', features[i]);
+        }
+      }
+      state.features = features;
+      /*
       state.features.forEach(i => {
         if(i.id === f.id) {
-          i = f;
+          f.properties = JSON.stringify(f.properties, '', '\t');
+          f.geometry = JSON.stringify(f.geometry, '', '\t');
+          console.log('i.id', i);
+          i = {...f};
+          console.log('in theory stored', i.properties);
         }
       });
+      */
+
     },
     setFeatures(state, features) {
       // moved the jsonprint stuff here
@@ -57,7 +75,9 @@ export default new Vuex.Store({
       let f = { ...params.feature};
       f.properties = JSON.parse(params.feature.properties);
       f.geometry = JSON.parse(params.feature.geometry);
-      await datahub.saveFeature(params.space.id, f, context.state.token);
+      console.log('pre puid', f.properties['@ns:com:here:xyz'].puuid);
+      f = await datahub.saveFeature(params.space.id, f, context.state.token);
+      console.log('post puid', f.properties['@ns:com:here:xyz'].puuid);
       //update feature
       context.commit('saveFeature', f);
     }

@@ -25,6 +25,7 @@ module.exports = {
 			}
 		});
 		let data = await resp.json();
+		console.log('save done');
 		return data;
 
 	}
