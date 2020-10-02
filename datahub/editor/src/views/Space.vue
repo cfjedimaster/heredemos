@@ -15,11 +15,22 @@
         ></v-textarea>
         <GeometryMap :geometry="feature.geometry" width="400" height="300"></GeometryMap>
       </v-card-text>
+      <!--
+      <v-alert :value="" type="error" dismissible>2Hello</v-alert>
+      -->
       <v-card-actions>
         <v-btn color="green" text @click="saveFeature(feature)">Save Changes</v-btn>
       </v-card-actions>
     </v-card>
 
+    <!--
+    todo: Return to this 
+    <v-dialog :value="error" width="400">
+    <v-alert color="red" dark width="300">
+    {{ errorMsg }}
+    </v-alert>
+    </v-dialog>
+    -->
   </v-container>
 </template>
 
@@ -34,7 +45,9 @@ export default {
   },
   data() {
     return {
-  		space: null
+  		space: null,
+      error:false,
+      errorMsg:null
     }
   },
   computed:{
@@ -45,7 +58,28 @@ export default {
   methods: {
     saveFeature(f) {
       console.log('lets save this feature');
-      console.log(f.properties)
+      //validate properties and geometry as valid json
+      try {
+        let props = JSON.parse(f.properties);
+      } catch(e) {
+        console.log(e);
+        alert('Bad JSON in properties.');
+        return;
+//        this.error = true;
+//        this.errorMsg = "Invalid JSON in your properties value.";
+      }
+
+      try {
+        let geo = JSON.parse(f.geometry);
+      } catch(e) {
+        console.log(e);
+        alert('Bad JSON in geometry.');
+        return;
+      }
+
+      this.$store.dispatch('saveFeature', { space:this.space, feature:f });
+
+
     }
   }
 }

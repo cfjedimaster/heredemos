@@ -16,7 +16,6 @@ export default {
 	},
 	created() {
 		this.imgSrc = this.featureToMap(JSON.parse(this.geometry), key, this.width, this.height);
-		console.log('done', this.imgSrc);
 	},
 	data: () => ({
 		imgSrc:null

@@ -23,6 +23,13 @@ export default new Vuex.Store({
       state.token = token;
       localStorage.setItem('token', token);
     },
+    saveFeature(state, f) {
+      state.features.forEach(i => {
+        if(i.id === f.id) {
+          i = f;
+        }
+      });
+    },
     setFeatures(state, features) {
       // moved the jsonprint stuff here
       features.forEach(f => {
@@ -42,6 +49,17 @@ export default new Vuex.Store({
     },
     async loadSpaces(context) {
       context.commit('setSpaces', await datahub.loadSpaces(context.state.token));
+    },
+    async saveFeature(context, params) {
+      console.log('store action to save feature called');
+      //return to JSON
+      //clone first
+      let f = { ...params.feature};
+      f.properties = JSON.parse(params.feature.properties);
+      f.geometry = JSON.parse(params.feature.geometry);
+      await datahub.saveFeature(params.space.id, f, context.state.token);
+      //update feature
+      context.commit('saveFeature', f);
     }
   },
   modules: {
