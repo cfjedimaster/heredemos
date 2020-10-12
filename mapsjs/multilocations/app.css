@@ -20,7 +20,8 @@ body {
 
 #credit {
 	position: absolute;
-	bottom: 0;
+	bottom: 0px;
+	font-size: 10px;
 }
 
 input, button {

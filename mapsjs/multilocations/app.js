@@ -95,7 +95,6 @@ async function doDestination(e) {
 
 	let route = await getRoute(routeRequestParams);
 	addRouteShapeToMap(route, id);
-
 }
 
 function addDestMarker(pos, id) {
@@ -136,14 +135,11 @@ async function getRoute(p) {
 
 function addRouteShapeToMap(route,id) {
 
-	// remove existing routes
-	/*
-	let obs = map.getObjects();
-	obs.forEach(ob => {
-		if(ob.type === H.map.Object.Type.SPATIAL) map.removeObject(ob);
-	});
-	*/
-	if(destRoutes[id]) map.removeObject(destRoutes[id]);
+	// remove existing route
+	if(destRoutes[id]) {
+		destRoutes[id].removeAll();
+		map.removeObject(destRoutes[id]);
+	}
 
 	destRoutes[id] = new H.map.Group();
 
@@ -158,6 +154,7 @@ function addRouteShapeToMap(route,id) {
 				strokeColor: 'rgba(0, 128, 255, 0.7)'
 			}
 		});
+
 		destRoutes[id].addObject(polyline);
 
   	});
