@@ -24,8 +24,9 @@ function init() {
 		defaultLayers.vector.normal.map,
 		{
 			zoom: 5,
-			center: { lat: 30.22, lng: -92.02 },
-			pixelRatio: window.devicePixelRatio || 1
+			center: { lat: 39.83, lng: -98.58 },
+			pixelRatio: window.devicePixelRatio || 1,
+			padding: {top: 50, left: 50, bottom: 50, right: 50}
 		}
 	);
 
