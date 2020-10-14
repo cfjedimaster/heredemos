@@ -27,3 +27,8 @@ body {
 input, button {
 	width: 100%;
 }
+
+.bubble {
+	width: 300px;
+	height: 100px;
+}

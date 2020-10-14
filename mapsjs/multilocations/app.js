@@ -7,8 +7,9 @@ const KEY = 'c1LJuR0Bl2y02PefaQ2d8PvPnBKEN8KdhAOFYR_Bgmw';
 
 document.addEventListener('DOMContentLoaded', init, false);
 
-let map, platform, router, geocoder;
+let map, platform, router, geocoder, ui;
 let startingAddress, locateMeBtn, homeMarker, homeIcon, destFields, destMarkers = {}, destIcon, homePos, destRoutes = {};
+let bubble;
 
 function init() {
 	platform = new H.service.Platform({
@@ -32,7 +33,7 @@ function init() {
 	let behavior = new H.mapevents.Behavior(new H.mapevents.MapEvents(map));
 
 	// Create the default UI:
-	let ui = H.ui.UI.createDefault(map, defaultLayers);
+	ui = H.ui.UI.createDefault(map, defaultLayers);
 
 	homeIcon = new H.map.Icon('home.png');
 	destIcon = new H.map.Icon('marker.png');
@@ -83,7 +84,6 @@ async function doDestination(e) {
 	console.log('id', e.target.id);
 	if(!e.target.value) return;
 	let pos = await geocode(e.target.value);
-	addDestMarker(pos, id);
 
 	let routeRequestParams = {
         routingMode: 'fast',
@@ -94,12 +94,30 @@ async function doDestination(e) {
     };
 
 	let route = await getRoute(routeRequestParams);
+	console.log(route);
+	let totalTime = formatTime(route.sections[0].travelSummary.duration);
+
+	addDestMarker(pos, id, `
+<p>
+	<strong>Destination:</strong> ${e.target.value}<br/>
+	<strong>Driving Time:</strong> ${totalTime}
+</p>`);
+
 	addRouteShapeToMap(route, id);
 }
 
-function addDestMarker(pos, id) {
+function addDestMarker(pos, id, label) {
 	if(destMarkers[id]) map.removeObject(destMarkers[id]);
 	destMarkers[id] = new H.map.Marker({lat:pos.lat, lng:pos.lng}, {icon:destIcon});
+	destMarkers[id].setData(`<div class="bubble">${label}</div>`);
+
+	destMarkers[id].addEventListener('tap', e => {
+		if(bubble) ui.removeBubble(bubble);
+		bubble = new H.ui.InfoBubble(e.target.getGeometry(), {
+			content:e.target.getData()
+		});
+		ui.addBubble(bubble);
+	});
 	map.addObject(destMarkers[id]);
 }
 
@@ -161,4 +179,13 @@ function addRouteShapeToMap(route,id) {
 
 	map.addObject(destRoutes[id]);
 
+}
+
+function formatTime(s) {
+  //first convert to minutes and drop seconds
+  let minutes = Math.floor(s/60);
+  if(minutes < 60) return `${minutes} minutes`;
+  let hours = Math.floor(minutes/60);
+  minutes = minutes - (hours * 60);
+  return `${hours} hours and ${minutes} minutes`;
 }
