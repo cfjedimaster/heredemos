@@ -8,7 +8,7 @@ const KEY = 'c1LJuR0Bl2y02PefaQ2d8PvPnBKEN8KdhAOFYR_Bgmw';
 document.addEventListener('DOMContentLoaded', init, false);
 
 let map, platform, router, geocoder, ui;
-let startingAddress, locateMeBtn, homeMarker, homeIcon, destFields, destMarkers = {}, destIcon, homePos, destRoutes = {};
+let startingAddress, locateMeBtn, homeMarker, homeIcon, destFields, destMarkers = {}, destIcon, homePos, destRoutes = {},markerGroup;
 let bubble;
 
 function init() {
@@ -34,6 +34,8 @@ function init() {
 
 	// Create the default UI:
 	ui = H.ui.UI.createDefault(map, defaultLayers);
+	markerGroup = new H.map.Group();
+	map.addObject(markerGroup);
 
 	homeIcon = new H.map.Icon('home.png');
 	destIcon = new H.map.Icon('marker.png');
@@ -50,6 +52,8 @@ function init() {
 	});
 
 }
+
+
 
 async function doStartingLocation() {
 	console.log('address change', startingAddress.value);
@@ -74,9 +78,11 @@ function disableDestinationFields() {
 }
 
 function addHomeMarker(pos) {
-	if(homeMarker) map.removeObject(homeMarker);
+	if(homeMarker) markerGroup.removeObject(homeMarker);
 	homeMarker = new H.map.Marker({lat:pos.lat, lng:pos.lng}, {icon:homeIcon});
-   	map.addObject(homeMarker);
+	homeMarker.setData("You are HERE")
+	markerGroup.addObject(homeMarker);
+	map.setCenter(homeMarker.getGeometry());
 }
 
 async function doDestination(e) {
@@ -107,7 +113,7 @@ async function doDestination(e) {
 }
 
 function addDestMarker(pos, id, label) {
-	if(destMarkers[id]) map.removeObject(destMarkers[id]);
+	if(destMarkers[id]) markerGroup.removeObject(destMarkers[id]);
 	destMarkers[id] = new H.map.Marker({lat:pos.lat, lng:pos.lng}, {icon:destIcon});
 	destMarkers[id].setData(`<div class="bubble">${label}</div>`);
 
@@ -118,7 +124,7 @@ function addDestMarker(pos, id, label) {
 		});
 		ui.addBubble(bubble);
 	});
-	map.addObject(destMarkers[id]);
+	markerGroup.addObject(destMarkers[id]);
 }
 
 async function geocode(s) {
@@ -156,7 +162,7 @@ function addRouteShapeToMap(route,id) {
 	// remove existing route
 	if(destRoutes[id]) {
 		destRoutes[id].removeAll();
-		map.removeObject(destRoutes[id]);
+		markerGroup.removeObject(destRoutes[id]);
 	}
 
 	destRoutes[id] = new H.map.Group();
@@ -177,7 +183,8 @@ function addRouteShapeToMap(route,id) {
 
   	});
 
-	map.addObject(destRoutes[id]);
+	markerGroup.addObject(destRoutes[id]);
+	map.getViewModel().setLookAtData({bounds: markerGroup.getBoundingBox()});
 
 }
 
