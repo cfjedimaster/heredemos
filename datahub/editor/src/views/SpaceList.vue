@@ -27,6 +27,7 @@ export default {
     return {
       search:'',
       headers:[
+        {text: 'ID', value:'id'},
         {text: 'Title', value:'title'},
         {text: 'Description', value:'description'},
         {text:'', value:'actions' }
