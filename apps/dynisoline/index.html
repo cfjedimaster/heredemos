@@ -27,6 +27,7 @@
 		<input id="fileUpload" type="file" accept=".geojson,.csv">
 
 		<!-- second state is - provide controls for isoline -->
+		<div id="rangeControls">
 		<p>
 		<input type="range" min="0" max="100" value="0" list="rangeOptions" id="range" oninput="label.value=parseInt(range.value)"> 
 		<datalist id="rangeOptions">
@@ -46,6 +47,7 @@
 		<output for="range" id="label">0</output><br/>
 		todo: drop down for time vs distance, currently its dinstance in KM
 		</p>
+		</div>
 
 		
 	</div>

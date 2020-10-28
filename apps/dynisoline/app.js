@@ -5,7 +5,7 @@ const MAX_FEATURE_SIZE = 10;
 document.addEventListener('DOMContentLoaded', init, false);
 
 let map, platform, ui, router;
-let fileInput, rangeInput;
+let fileInput, rangeInput, rangeControls;
 
 let mapData, markerGroup, isoGroup;
 
@@ -51,6 +51,9 @@ function init() {
 	rangeInput.addEventListener('change', handleRange);
 
 	document.querySelector('#max_display').innerHTML = MAX_FEATURE_SIZE;
+
+	rangeControls = document.querySelector('#rangeControls');
+
 }
 
 function handleFile() {
@@ -80,6 +83,9 @@ function handleFile() {
 		//limit to total
 		mapData = mapData.slice(0, MAX_FEATURE_SIZE-1);
 		renderMapData();
+		//show the controls div
+		rangeControls.style.display = 'block';
+
 	}
 	reader.onerror = evt => {
 		console.error(evt);
