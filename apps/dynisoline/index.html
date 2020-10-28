@@ -20,12 +20,16 @@
 		two columns named <code>lat</code> and <code>lng</code>.
 		</p>
 
+		<p>
+		The max number of features rendered is: <span id="max_display"></span>
+		</p>
+
 		<input id="fileUpload" type="file" accept=".geojson,.csv">
 
 		<!-- second state is - provide controls for isoline -->
 		<p>
-		<input type="range" min="0" max="100" value="10" list="range" id="distance" oninput="label.value=parseInt(distance.value)"> 
-		<datalist id="range">
+		<input type="range" min="0" max="100" value="0" list="rangeOptions" id="range" oninput="label.value=parseInt(range.value)"> 
+		<datalist id="rangeOptions">
 			<option value="0" label="0">
 			<option value="10">
 			<option value="20">
@@ -39,8 +43,8 @@
 			<option value="100" label="100">			
 		</datalist>
 
-		<output for="distance" id="label">10</output><br/>
-		todo: drop down for time vs distance
+		<output for="range" id="label">0</output><br/>
+		todo: drop down for time vs distance, currently its dinstance in KM
 		</p>
 
 		

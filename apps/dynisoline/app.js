@@ -1,11 +1,13 @@
 const KEY = 'c1LJuR0Bl2y02PefaQ2d8PvPnBKEN8KdhAOFYR_Bgmw';
 
+const MAX_FEATURE_SIZE = 10;
+
 document.addEventListener('DOMContentLoaded', init, false);
 
-let map, platform, ui;
-let fileInput, dinstanceInput;
+let map, platform, ui, router;
+let fileInput, rangeInput;
 
-let mapData, markerGroup;
+let mapData, markerGroup, isoGroup;
 
 function init() {
 	platform = new H.service.Platform({
@@ -15,6 +17,8 @@ function init() {
 	// Obtain the default map types from the platform object:
 	let defaultLayers = platform.createDefaultLayers();
 
+	router = platform.getRoutingService();
+	
 	map = new H.Map(
 		document.getElementById('map'),
 		defaultLayers.vector.normal.map,
@@ -29,6 +33,9 @@ function init() {
 	markerGroup = new H.map.Group();
 	map.addObject(markerGroup);
 
+	isoGroup = new H.map.Group();
+	map.addObject(isoGroup);
+
 	new H.mapevents.Behavior(new H.mapevents.MapEvents(map));
 
 	// Create the default UI:
@@ -40,8 +47,10 @@ function init() {
 	fileInput = document.querySelector('#fileUpload');
 	fileInput.addEventListener('change', handleFile);
 
-	distanceInput = document.querySelector('#distance');
-	distanceInput.addEventListener('change', handleDistance);
+	rangeInput = document.querySelector('#range');
+	rangeInput.addEventListener('change', handleRange);
+
+	document.querySelector('#max_display').innerHTML = MAX_FEATURE_SIZE;
 }
 
 function handleFile() {
@@ -68,6 +77,8 @@ function handleFile() {
 		if(type === 'geojson') mapData = parseGeoJSON(text);
 		if(type === 'csv') alert('TODO');
 
+		//limit to total
+		mapData = mapData.slice(0, MAX_FEATURE_SIZE-1);
 		renderMapData();
 	}
 	reader.onerror = evt => {
@@ -109,12 +120,67 @@ function renderMapData() {
 }
 
 /*
-todo: change name, its distance or time
 todo: dont do shit till we have data
 */
-function handleDistance() {
+function handleRange() {
 	//note, the call below isn't documented
 	if(markerGroup.getChildCount() === 0) return;
 	console.log('ok draw some freaking isolines!');
 
+	isoGroup.removeAll();
+
+	let range = rangeInput.value;
+
+	/*
+	rangetype=time, its seconds
+	rangetype=distance, its meters
+	*/
+	//hard coded for now
+	let type = 'distance';
+	if(type === 'distance') {
+		//convert km input to m
+		range = range * 1000;
+	}
+
+	mapData.forEach(m => {
+
+		let routingParams = {
+			'mode': 'fastest;car;',
+			'start': `geo!${m.lat},${m.lng}`,
+			'range': range,
+			'rangetype': type
+		};
+
+		router.calculateIsoline(
+			routingParams,
+			drawISOResult,
+			error => alert(error.message));
+
+	});
+
+
+
+}
+
+function drawISOResult(result) {
+	console.log('drawISOResult', result);
+
+    let isolineCoords = result.response.isoline[0].component[0].shape,
+    linestring = new H.geo.LineString(),
+    isolinePolygon;
+
+	// Add the returned isoline coordinates to a linestring:
+	isolineCoords.forEach(function(coords) {
+		linestring.pushLatLngAlt.apply(linestring, coords.split(','));
+	});
+
+	// Create a polygon and a marker representing the isoline:
+	isolinePolygon = new H.map.Polygon(linestring);
+
+	// Add the polygon and marker to the map:
+	isoGroup.addObjects([isolinePolygon]);
+
+	// Center and zoom the map so that the whole isoline polygon is
+	// in the viewport:
+	map.getViewModel().setLookAtData({bounds: isoGroup.getBoundingBox()});
 }
