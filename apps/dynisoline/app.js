@@ -5,7 +5,7 @@ const MAX_FEATURE_SIZE = 10;
 document.addEventListener('DOMContentLoaded', init, false);
 
 let map, platform, ui, router;
-let fileInput, rangeInput, rangeControls;
+let fileInput, rangeInput, rangeControls, rangeType;
 
 let mapData, markerGroup, isoGroup;
 
@@ -53,6 +53,9 @@ function init() {
 	document.querySelector('#max_display').innerHTML = MAX_FEATURE_SIZE;
 
 	rangeControls = document.querySelector('#rangeControls');
+
+	rangeType = document.querySelectorAll('input[name=rangetype]');
+	rangeType.forEach(r => r.addEventListener('change', handleRange));
 
 }
 
@@ -141,13 +144,17 @@ function handleRange() {
 	rangetype=time, its seconds
 	rangetype=distance, its meters
 	*/
-	//hard coded for now
 	let type = 'distance';
+	if(rangeType[1].checked) type = 'time'; 
+
 	if(type === 'distance') {
 		//convert km input to m
 		range = range * 1000;
+	} else {
+		//convert minutes to s
+		range = range * 60;
 	}
-
+console.log('type',type,'range',range);
 	mapData.forEach(m => {
 
 		let routingParams = {
