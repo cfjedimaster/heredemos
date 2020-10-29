@@ -60,10 +60,6 @@ function init() {
 }
 
 function handleFile() {
-	console.log('handleFile');
-	console.log(fileInput.files);
-
-
 	let file = fileInput.files[0];
     if(!file) return;
     let type = file.name.split('.').pop();
@@ -81,7 +77,10 @@ function handleFile() {
 		console.log('read text');
 
 		if(type === 'geojson') mapData = parseGeoJSON(text);
-		if(type === 'csv') alert('TODO');
+		if(type === 'csv') {
+			mapData = parseCSV(text);
+			if(!mapData) return;
+		}
 
 		//limit to total
 		mapData = mapData.slice(0, MAX_FEATURE_SIZE-1);
@@ -105,7 +104,6 @@ And that's it. We need *something* else eventually to add labels but - for now, 
 
 Note, we are assuming Point geometries
 */
-
 function parseGeoJSON(text) {
 	let data = JSON.parse(text);
 	return data.features.map(f => {
@@ -116,6 +114,23 @@ function parseGeoJSON(text) {
 	});
 }
 
+function parseCSV(text) {
+	let parsedData = Papa.parse(text, {header:true, skipEmptyLines:true});
+
+	if(parsedData.meta.fields.indexOf("lat") === -1 || parsedData.meta.fields.indexOf("lng") === -1) {
+		alert('CSV file must contain headers named lat and lng');
+		return;
+	}
+
+	return parsedData.data.map(f => {
+		return {
+			lat:f.lat,
+			lng:f.lng,
+		}
+	});
+
+
+}
 
 function renderMapData() {
 	console.log('called', mapData);
@@ -154,7 +169,7 @@ function handleRange() {
 		//convert minutes to s
 		range = range * 60;
 	}
-console.log('type',type,'range',range);
+
 	mapData.forEach(m => {
 
 		let routingParams = {
