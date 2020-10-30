@@ -54,8 +54,6 @@ function init() {
 
 }
 
-
-
 async function doStartingLocation() {
 	console.log('address change', startingAddress.value);
 	if(!startingAddress.value) {
@@ -146,15 +144,23 @@ async function geocode(s) {
 
 async function getRoute(p) { 
 
-	let url = `https://router.hereapi.com/v8/routes?origin=${p.origin}&transportMode=${p.transportMode}&routingMode=${p.routingMode}&destination=${p.destination}&apikey=${KEY}&return=${p.return}`;
-	if(p.via) {
-		p.via.forEach(v => {
-			url += '&via='+v;
-		});
+	let params = {
+		origin:p.origin, 
+		destination:p.destination,
+		transportMode:p.transportMode,
+		routingMode:p.routingMode,
+		return:p.return,
 	}
-	let resp = await fetch(url);
-	let data = await resp.json();
-	return data.routes[0];
+
+	return new Promise((resolve, reject) => {
+		router.calculateRoute(
+			params, 
+			r => {
+				resolve(r.routes[0]);
+			}, 
+			e => reject(e)
+		);
+	});
 
 }
 
