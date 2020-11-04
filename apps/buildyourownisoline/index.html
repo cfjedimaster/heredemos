@@ -1,0 +1,54 @@
+<html>
+<head>
+	<script src="https://js.api.here.com/v3/3.1/mapsjs-core.js" type="text/javascript" charset="utf-8"></script>
+	<script src="https://js.api.here.com/v3/3.1/mapsjs-service.js" type="text/javascript" charset="utf-8"></script>
+	<script src="https://js.api.here.com/v3/3.1/mapsjs-mapevents.js" type="text/javascript" charset="utf-8"></script>
+	<script src="https://js.api.here.com/v3/3.1/mapsjs-ui.js" type="text/javascript" charset="utf-8"></script>
+	<link rel="stylesheet" type="text/css" href="https://js.api.here.com/v3/3.1/mapsjs-ui.css" />
+	<link rel="stylesheet" type="text/css" href="app.css" />
+</head>
+
+<body>
+
+<div class="container">
+	<div id="panel">
+		<h2>Cat Range</h2>
+		
+		<p>
+		This shows cats and their range by (if they got into a car).
+		</p>
+		
+		<div id="rangeControls">
+		<p>
+		<input type="range" min="0" max="100" value="0" list="rangeOptions" id="range" oninput="label.value=parseInt(range.value)"> 
+		<datalist id="rangeOptions">
+			<option value="0" label="0">
+			<option value="10">
+			<option value="20">
+			<option value="30">
+			<option value="40">
+			<option value="50" label="50">
+			<option value="60">
+			<option value="70" >
+			<option value="80">
+			<option value="90">
+			<option value="100" label="100">			
+		</datalist>
+
+		<output for="range" id="label">0</output><br/>
+		<input type="radio" name="rangetype" value="distance" checked> Distance (km)<br/>
+		<input type="radio" name="rangetype" value="time"> Time (minutes)<br/>
+		</p>
+		</div>
+
+		
+	</div>
+
+	<div id="map"></div>
+
+</div>
+
+<script src="papaparse.min.js"></script>
+<script src="app.js"></script>
+</body>
+</html>

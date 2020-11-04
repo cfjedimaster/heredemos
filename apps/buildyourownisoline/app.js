@@ -1,4 +1,4 @@
-const KEY = 'c1LJuR0Bl2y02PefaQ2d8PvPnBKEN8KdhAOFYR_Bgmw';
+const KEY = 'change me';
 
 document.addEventListener('DOMContentLoaded', init, false);
 
@@ -61,16 +61,7 @@ I'm the function that loads your data. It must return an array of items where
 each item has a lat and lng property.
 */
 async function loadData() {
-	let result = [];
-	let resp = await fetch('./cats.geojson');
-	let data = await resp.json();
-	data.features.forEach(f => {
-		result.push({
-			lat:f.geometry.coordinates[1],
-			lng:f.geometry.coordinates[0]
-		});
-	});
-	return result;
+	alert('change me!');
 }
 
 function renderMapData() {
