@@ -1,0 +1,70 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "properties": {
+        "place": "Alabama"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -87.71484375,
+          33.94335994657882
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "place": "Nebraska"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -101.337890625,
+          41.44272637767212
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "place": "Texas"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -103.0078125,
+          34.161818161230386
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "place": "NOLA"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -90.087890625,
+          29.6880527498568
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "place": "Missouri"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -92.900390625,
+          37.64903402157866
+        ]
+      }
+    }
+  ]
+}

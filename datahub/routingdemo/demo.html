@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>Route Demo 1</title>
+		<meta name="description" content="">
+		<meta name="viewport" content="initial-scale=1.0, width=device-width" />
+		<script src="https://js.api.here.com/v3/3.1/mapsjs-core.js" type="text/javascript" charset="utf-8"></script>
+		<script src="https://js.api.here.com/v3/3.1/mapsjs-service.js" type="text/javascript" charset="utf-8"></script>
+    	<script src="https://js.api.here.com/v3/3.1/mapsjs-mapevents.js" type="text/javascript" charset="utf-8"></script>
+		<script src="https://js.api.here.com/v3/3.1/mapsjs-ui.js" type="text/javascript" charset="utf-8"></script>
+        <link rel="stylesheet" type="text/css" href="https://js.api.here.com/v3/3.1/mapsjs-ui.css" />
+		<style>
+		body {
+			margin: 0px;
+		    font-family: FiraGo, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+		}
+		
+		.container {
+			display: grid;
+			grid-template-columns: 80% 20%;
+			height: 100vh;
+		}
+
+		#sidePanel {
+			padding: 10px;
+		}
+
+		svg { width: 10px; height: 10px; }
+		</style>
+	</head>
+	<body>
+
+		<div class="container">
+			<div id="mapContainer"></div>
+			<div id="sidePanel">
+				<h2>Data Hub Routing Demo</h2>
+				<p>
+				The markers shown are driven by a Data Hub space. If you click on the map, I'll show routing information from your point to each of the 
+				items.
+				</p>
+
+				<p id="location">
+				</p>
+
+				<p id="results">
+				</p>
+
+				<div id="status">
+				</div>
+			</div>
+		</div>
+
+		<script>
+		const KEY = 'c1LJuR0Bl2y02PefaQ2d8PvPnBKEN8KdhAOFYR_Bgmw';
+		const XYZ_TOKEN = 'AOMLugdVQtCWbPFBzavH9AA';
+		const XYZ_SPACE = '2QmmtHn4';
+		const icon = new H.map.Icon('marker.svg');
+
+		let features, map, statusDom, locationDom, resultsDom, geocoder, router;
+
+		document.addEventListener('DOMContentLoaded', init, false);
+
+		async function init() {
+
+			statusDom = document.querySelector('#status');
+			locationDom = document.querySelector('#location');
+			resultsDom = document.querySelector('#results');
+
+			let platform = new H.service.Platform({
+				'apikey': KEY
+			});
+
+			let defaultLayers = platform.createDefaultLayers();
+
+			map = new H.Map(
+				document.getElementById('mapContainer'),
+				defaultLayers.vector.normal.map,
+				{
+					zoom: 5,
+					center: { lat: 31.51073, lng: -96.4247 },
+					pixelRatio: window.devicePixelRatio || 1
+				}
+			);
+			
+			let behavior = new H.mapevents.Behavior(new H.mapevents.MapEvents(map));
+
+			geocoder = platform.getGeocodingService();
+			router = platform.getRoutingService(null, 8);
+
+			// Create the default UI:
+			let ui = H.ui.UI.createDefault(map, defaultLayers);
+
+			let data = await getData(XYZ_SPACE);
+			features = data.features;
+
+			renderFeatureMarkers(features);
+
+			map.addEventListener('tap', evt => {
+				var coord = map.screenToGeo(
+					evt.currentPointer.viewportX,
+					evt.currentPointer.viewportY);
+				let lat = coord.lat.toFixed(4);
+				let lng = coord.lng.toFixed(4);
+				let html = `Clicked at lat/lng <strong>${lat}, ${lng}</strong>`;
+
+
+				var reverseGeocodingParameters = {
+					prox: lat + ',' + lng,
+					mode: 'retrieveAddresses',
+					maxresults: 1
+				};
+
+				geocoder.reverseGeocode(
+					reverseGeocodingParameters,
+					e => {
+						if(e.Response.View.length > 0) {
+							let result = e.Response.View[0].Result[0];
+							let address = result.Location.Address.Label;
+							html += `<br>${address}`;
+						}
+						locationDom.innerHTML = html;
+						statusDom.innerHTML = '<p><i>Generating routes...</i></p>';
+						doRoutes({lat:parseFloat(lat),lng:parseFloat(lng)});
+					},
+					function(e) { alert(e); }
+				);
+
+			});		
+
+		}
+
+		async function renderFeatureMarkers(features) {
+
+			features.forEach(f => {
+				map.addObject(new H.map.Marker({lat:f.geometry.coordinates[1], lng:f.geometry.coordinates[0]}, { icon:icon}));				
+			});
+		}
+
+		// I wrap a call to the DH REST API to get features. This assumes one page is enough.
+		async function getData(space) {
+			let resp = await fetch(`https://xyz.api.here.com/hub/spaces/${space}/iterate?access_token=${XYZ_TOKEN}`);
+			let data = await resp.json();
+			return data;
+		}
+
+		async function doRoutes(origin) {
+			resultsDom.innerHTML = '';
+			//single threads it, ok for now		
+			for(f of features) {
+				let route = await getRoute(origin, {lng:f.geometry.coordinates[0], lat:f.geometry.coordinates[1]});
+
+				let lineString = H.geo.LineString.fromFlexiblePolyline(route.polyline);
+
+				// Create a polyline to display the route:
+				var routeLine = new H.map.Polyline(lineString, {
+					style: { strokeColor: 'blue', lineWidth: 3 }
+				});
+
+				// Add the route polyline and the two markers to the map:
+				map.addObjects([routeLine]);
+				console.log(f.properties, route.summary);
+				resultsDom.innerHTML += `
+<p>
+Distance to ${f.properties.place} is ${route.summary.length} meters
+and will take ${Math.floor(route.summary.duration/60)} minutes to drive.
+</p>
+				`;
+
+			}
+			statusDom.innerHTML = '';
+		}
+
+		async function getRoute(start, end) {
+			return new Promise((resolve, reject) => {
+
+			router.calculateRoute({
+				'origin': `${start.lat},${start.lng}`,
+				'destination': `${end.lat},${end.lng}`,
+				'return': 'polyline,summary',
+				'transportMode': 'car'
+			}, result => {
+				resolve(result.routes[0].sections[0]);
+				/*
+				const sections = result.routes[0].sections;
+				const lineStrings = [];
+				sections.forEach((section) => {
+					// convert Flexible Polyline encoded string to geometry
+					lineStrings.push(H.geo.LineString.fromFlexiblePolyline(section.polyline));
+				});
+				const multiLineString = new H.geo.MultiLineString(lineStrings);
+				const bounds = multiLineString.getBoundingBox();
+				// render route on the map
+				map.addObject(new H.map.Polyline(multiLineString, {style: {lineWidth: 5}}));
+				// zoom to polyline
+				map.getViewModel().setLookAtData({bounds});
+				*/
+			}, console.error);
+
+			});
+		}
+		</script>
+	</body>
+</html>
+
+
+
+
