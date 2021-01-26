@@ -61,5 +61,5 @@ fetch('https://tourplanning.hereapi.com/v2/problems?apikey='+KEY, {
 	}
 }).then(res => res.json())
 .then(res => {
-	console.log('Done', res);
+	console.log(JSON.stringify(res, null, '\t'));
 });
