@@ -1,0 +1,260 @@
+{
+	"statistic": {
+		"cost": 110.82572800000003,
+		"distance": 33504,
+		"duration": 17088,
+		"times": {
+			"driving": 4500,
+			"serving": 1800,
+			"waiting": 10788,
+			"break": 0
+		}
+	},
+	"tours": [
+		{
+			"vehicleId": "myVehicle_1",
+			"typeId": "myVehicle",
+			"stops": [
+				{
+					"location": {
+						"lat": 47.602,
+						"lng": -122.30941
+					},
+					"time": {
+						"arrival": "2020-07-04T09:56:35Z",
+						"departure": "2020-07-04T09:56:35Z"
+					},
+					"load": [
+						10
+					],
+					"activities": [
+						{
+							"jobId": "departure",
+							"type": "departure"
+						}
+					]
+				},
+				{
+					"location": {
+						"lat": 47.60834,
+						"lng": -122.30207
+					},
+					"time": {
+						"arrival": "2020-07-04T10:00:00Z",
+						"departure": "2020-07-04T10:03:00Z"
+					},
+					"load": [
+						9
+					],
+					"activities": [
+						{
+							"jobId": "myJob0",
+							"type": "delivery"
+						}
+					]
+				},
+				{
+					"location": {
+						"lat": 47.62153,
+						"lng": -122.30297
+					},
+					"time": {
+						"arrival": "2020-07-04T10:06:01Z",
+						"departure": "2020-07-04T10:09:01Z"
+					},
+					"load": [
+						8
+					],
+					"activities": [
+						{
+							"jobId": "myJob1",
+							"type": "delivery"
+						}
+					]
+				},
+				{
+					"location": {
+						"lat": 47.61204,
+						"lng": -122.3467
+					},
+					"time": {
+						"arrival": "2020-07-04T10:19:54Z",
+						"departure": "2020-07-04T12:03:00Z"
+					},
+					"load": [
+						7
+					],
+					"activities": [
+						{
+							"jobId": "myJob5",
+							"type": "delivery"
+						}
+					]
+				},
+				{
+					"location": {
+						"lat": 47.63836,
+						"lng": -122.34125
+					},
+					"time": {
+						"arrival": "2020-07-04T12:11:00Z",
+						"departure": "2020-07-04T12:14:00Z"
+					},
+					"load": [
+						6
+					],
+					"activities": [
+						{
+							"jobId": "myJob4",
+							"type": "delivery"
+						}
+					]
+				},
+				{
+					"location": {
+						"lat": 47.63781,
+						"lng": -122.32456
+					},
+					"time": {
+						"arrival": "2020-07-04T12:21:32Z",
+						"departure": "2020-07-04T12:24:32Z"
+					},
+					"load": [
+						5
+					],
+					"activities": [
+						{
+							"jobId": "myJob3",
+							"type": "delivery"
+						}
+					]
+				},
+				{
+					"location": {
+						"lat": 47.63807,
+						"lng": -122.30117
+					},
+					"time": {
+						"arrival": "2020-07-04T12:31:04Z",
+						"departure": "2020-07-04T12:34:04Z"
+					},
+					"load": [
+						4
+					],
+					"activities": [
+						{
+							"jobId": "myJob2",
+							"type": "delivery"
+						}
+					]
+				},
+				{
+					"location": {
+						"lat": 47.63036,
+						"lng": -122.28816
+					},
+					"time": {
+						"arrival": "2020-07-04T12:40:18Z",
+						"departure": "2020-07-04T14:03:00Z"
+					},
+					"load": [
+						3
+					],
+					"activities": [
+						{
+							"jobId": "myJob9",
+							"type": "delivery"
+						}
+					]
+				},
+				{
+					"location": {
+						"lat": 47.59237,
+						"lng": -122.29138
+					},
+					"time": {
+						"arrival": "2020-07-04T14:13:34Z",
+						"departure": "2020-07-04T14:16:34Z"
+					},
+					"load": [
+						2
+					],
+					"activities": [
+						{
+							"jobId": "myJob8",
+							"type": "delivery"
+						}
+					]
+				},
+				{
+					"location": {
+						"lat": 47.58056,
+						"lng": -122.30992
+					},
+					"time": {
+						"arrival": "2020-07-04T14:24:42Z",
+						"departure": "2020-07-04T14:27:42Z"
+					},
+					"load": [
+						1
+					],
+					"activities": [
+						{
+							"jobId": "myJob7",
+							"type": "delivery"
+						}
+					]
+				},
+				{
+					"location": {
+						"lat": 47.59856,
+						"lng": -122.32537
+					},
+					"time": {
+						"arrival": "2020-07-04T14:34:14Z",
+						"departure": "2020-07-04T14:37:14Z"
+					},
+					"load": [
+						0
+					],
+					"activities": [
+						{
+							"jobId": "myJob6",
+							"type": "delivery"
+						}
+					]
+				},
+				{
+					"location": {
+						"lat": 47.602,
+						"lng": -122.30941
+					},
+					"time": {
+						"arrival": "2020-07-04T14:41:23Z",
+						"departure": "2020-07-04T14:41:23Z"
+					},
+					"load": [
+						0
+					],
+					"activities": [
+						{
+							"jobId": "arrival",
+							"type": "arrival"
+						}
+					]
+				}
+			],
+			"statistic": {
+				"cost": 110.82572800000003,
+				"distance": 33504,
+				"duration": 17088,
+				"times": {
+					"driving": 4500,
+					"serving": 1800,
+					"waiting": 10788,
+					"break": 0
+				}
+			}
+		}
+	]
+}

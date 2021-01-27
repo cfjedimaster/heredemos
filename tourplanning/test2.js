@@ -110,15 +110,109 @@ The first operation will be calling getTourPlan.
 */
 (async () => {
 
+	console.log('Asking Tour Planning for plan.');
 	let plan = await getTourPlan(deliveries, fleet, KEY);
-	console.log('THE PLAN-------------');
-	console.log(JSON.stringify(plan,null,'\t'));
+	console.log('Plan received...');
+	// If you want to see a result, look at result.json
+	//console.log(JSON.stringify(plan,null,'\t'));
+	/*
+	Given we have a result with .tours.stops...
+	The first item in this array should be leaving the start location: 
+	
+				{
+					"location": {
+						"lat": 47.602,
+						"lng": -122.30941
+					},
+					"time": {
+						"arrival": "2020-07-04T09:56:35Z",
+						"departure": "2020-07-04T09:56:35Z"
+					},
+					"load": [
+						10
+					],
+					"activities": [
+						{
+							"jobId": "departure",
+							"type": "departure"
+						}
+					]
+				},
 
+	Then we have should have ten more stop (cuz we had ten deliveries). Here is one sample:
+
+				{
+					"location": {
+						"lat": 47.60834,
+						"lng": -122.30207
+					},
+					"time": {
+						"arrival": "2020-07-04T10:00:00Z",
+						"departure": "2020-07-04T10:03:00Z"
+					},
+					"load": [
+						9
+					],
+					"activities": [
+						{
+							"jobId": "myJob0",
+							"type": "delivery"
+						}
+					]
+				},
+
+	We end up coming back home:
+
+					{
+					"location": {
+						"lat": 47.602,
+						"lng": -122.30941
+					},
+					"time": {
+						"arrival": "2020-07-04T14:41:23Z",
+						"departure": "2020-07-04T14:41:23Z"
+					},
+					"load": [
+						0
+					],
+					"activities": [
+						{
+							"jobId": "arrival",
+							"type": "arrival"
+						}
+					]
+				}
+	*/
+
+	// If we check, we should have 12 stops, our initial step, go to 10 places, then home
+	let stops = plan.tours[0].stops;
+	console.log('Number of stops:',stops.length);
+	// so lets now get routes between stop 1 to 2, 2 to 3, and so forth
+	for(let i=0;i<stops.length-1;i++) {
+		let from = stops[i].location;
+		let to = stops[i+1].location;
+		let departureTime = stops[i].time.departure;
+
+		console.log(`Get route from stop ${i+1} (${JSON.stringify(from)}) to ${i+2} (${JSON.stringify(to)}) at ${departureTime}`);
+
+		//todo - add time
+		let props = {
+			transportMode:'car',
+			origin:`${from.lat},${from.lng}`,
+			destination:`${to.lat},${to.lng}`,
+			return:'summary,actions,polyline',
+			departureTime
+		};
+		let route = await getRoute(props, KEY);
+		console.log('Route returned:');
+		// remove the polyline for now, it's noisy
+		delete route.sections[0].polyline;
+		console.log(route);
+	}
 })();
 
- // I wrap calls to the API and let you pass in *slighty* simpler data
- async function getTourPlan(dests, fleet, key) {
-	console.log('start getTourPlan');
+// I wrap calls to the API and let you pass in *slighty* simpler data
+async function getTourPlan(dests, fleet, key) {
 	let body = {
 		"plan": {
 			"jobs": [
@@ -158,5 +252,16 @@ The first operation will be calling getTourPlan.
 		});
 	});
 
- }
+}
 
+async function getRoute(props,key) {
+	let url = `https://router.hereapi.com/v8/routes?apikey=${key}`
+	for(let key in props) {
+		url += `&${key}=${props[key]}`;
+	}
+	let resp = await fetch(url);
+	let data = await resp.json();
+	if(!data.routes) console.log(data);
+	return data.routes[0];
+
+}
