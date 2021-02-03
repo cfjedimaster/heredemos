@@ -1,0 +1,17 @@
+Idea is to check the # of health resources at a location vs # of COVID cases
+
+API call for X,Y
+
+https://browse.search.hereapi.com/v1/browse?apiKey={{apiKey}}
+&at=30.22,-92.02
+&categories=800-8000-0000
+&limit=100
+&in=circle:30.22,-92.02;r=3200
+
+3200 meters is 2 miles
+
+
+COVID Data - https://covid-api.com/api/
+
+map of us, click to get hospital info on location, also reverse geocode to get region, 
+then call the covid api? display both
