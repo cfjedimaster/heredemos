@@ -7,6 +7,8 @@ Defines our categories to search.
 700-7300-0280 - Ambulance Services
 800-8000-0000 - Hospital or Health Care Facility
 
+Note, code where rendering is currently assuming all 3 cats. Could be more dynamic.
+
 */
 const CATEGORIES = '600-6400-0000,700-7300-0280,800-8000-0000';
 
@@ -17,6 +19,7 @@ document.addEventListener('DOMContentLoaded', init, false);
 
 let map, platform, ui, geocoder, search;
 
+let introDom, resultsDom;
 
 function init() {
 	platform = new H.service.Platform({
@@ -25,7 +28,6 @@ function init() {
 
 	// Obtain the default map types from the platform object:
 	let defaultLayers = platform.createDefaultLayers();
-
 	
 	map = new H.Map(
 		document.getElementById('map'),
@@ -49,19 +51,30 @@ function init() {
 	search = platform.getSearchService();
 
 	map.addEventListener('tap', handleClick);
+
+	introDom = document.querySelector('#intro');
+	resultsDom = document.querySelector('#results');
 }
 
 async function handleClick(evt) {
+	let covidData;
+
+	introDom.innerHTML = '';
+	
+	resultsDom.innerHTML = '<i>Loading...</i>';
+
+	let result = '';
+
 	var coord = map.screenToGeo(
 		evt.currentPointer.viewportX,
 		evt.currentPointer.viewportY);
 	let lat = coord.lat.toFixed(4);
 	let lng = coord.lng.toFixed(4);
 	let location = await reverseGeocode(lat, lng);
-	console.log(location);
+	console.log('location',location);
 	
 	let medicalResources = await getMedicalResources(lat, lng, RADIUS);
-	console.log(medicalResources);
+	console.log('medicalResources', medicalResources);
 
 	/*
 	do we have a county and state? we need this to get covid info
@@ -75,10 +88,43 @@ async function handleClick(evt) {
 		});
 	}
 	if(county && state) {
-		let covidData = await getCovidData(county, state);
+		covidData = await getCovidData(county, state);
 		console.log(covidData);
 	}
 
+	//todo - validate if we have good results
+	result += `
+	<p>
+	You clicked on ${county}, ${state}.
+	</p>
+	`;
+
+	if(medicalResources.items.length) {
+		result += `
+		<p>
+		I found ${medicalResources.items.length} medical resources (pharmarcies, ambulance services, and hopsital or health facilities). 
+		</p>
+		`;
+
+	} else {
+		result += `
+		<p>
+		I found no medical resources (pharmarcies, ambulance services, and hopsital or health facilities). 
+		</p>
+		`;
+	}
+
+	if(covidData) {
+		result += `
+		<p>
+		As of ${covidData.date}, there were ${numberFormat(covidData.confirmed)} confirmed cases and ${numberFormat(covidData.deaths)} deaths.
+		</p>
+		`;
+	} else {
+		result += '<p>I was not able to find any COVID data for this county.</p>';
+	}
+
+	resultsDom.innerHTML = result;
 }
 
 async function reverseGeocode(lat, lng) {
@@ -130,8 +176,6 @@ async function getMedicalResources(lat, lng, radius) {
 
 async function getCovidData(county, state) {
 	console.log(`look up ${county}, ${state}`);
-//	curl -X GET "https://covid-api.com/api/reports?iso=USA&region_province=Louisiana&city_name=Lafayette" -H "accept: application/json" -H "X-CSRF-TOKEN: "
-// curl -X GET "https://covid-api.com/api/reports?q=Church%20Point%2C%20Louisiana&iso=USA" -H "accept: application/json" -H "X-CSRF-TOKEN: "
 	return new Promise(async (resolve, reject) => {
 
 //		let resp = await fetch(`https://covid-api.com/api/reports?iso=USA&q=${encodeURIComponent(city)}%20${encodeURIComponent(state)}`);
@@ -140,4 +184,9 @@ async function getCovidData(county, state) {
 
 		resolve(data.data[0]);
 	});
+}
+
+function numberFormat(n) {
+	if(!window.Intl) return n;
+	return Intl.NumberFormat('en-us').format(n);
 }
